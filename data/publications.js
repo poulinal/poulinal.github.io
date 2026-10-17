@@ -43,14 +43,14 @@
     {
       id: 'RNAAS-magnetic-fields-2025',
       title: 'Magnetic Fields of Satellite Galaxies Stronger than Comparable Centrals in TNG100',
-      authors: ['A. Astronomer', 'B. Collaborator', 'C. Student', 'D. Senior'],
+      authors: ['Bryanne McDonough', 'Alexander Poulin'],
       year: 2026,
-      journal: 'ApJ',
-      volume: '981',
-      pages: '42',
-      type: 'article',
+      journal: 'RNAAS',
+      volume: '9',
+      pages: '4',
+      // type: 'article',
       featured: true,
-      citations: 7,
+      citations: 1,
       tags: ['Satellite Galaxies', 'Central Galaxies', 'Magnetic Field'],
       abstract:
         'Magnetic fields exist in and around galaxies, but the properties of these fields have not been fully explored due to the challenges inherent in observing and modeling them. In this Note, we explore the differences in magnetic field strength of central and satellite galaxies from the magnetohydrodynamic TNG100 simulation. We find that on average, magnetic fields in satellite galaxies are roughly an order of magnitude stronger than those of central galaxies with comparable masses. The difference is greater for satellites that have already approached within 1R200 of their host galaxies. These results indicate that magnetic fields in satellite galaxies are amplified by environmental processes as they fall into a host halo.',
@@ -89,6 +89,51 @@
           'pages = {93},'+
         '}'
     },
+
+    {
+      id: 'MnTe-thin-film-2026',
+      title: 'Large anomalous Hall effect in α-MnTe thin films grown on SrF2⁢ (111)',
+      authors: ['Sara Bey', 'Shelby S. Fields', 'Nicholas G. Combs2', 'Bence G. Márkus', 'Jiashu Wang', 'Liam T. Schmidt', 'Lincoln Curtis', 'Allecia Dodd-Noble', 'Alexander Poulin', 'et al.'],
+      year: 2026,
+      journal: 'Phys. Rev. B',
+      volume: '114',
+      pages: '194403',
+      type: 'article',
+      featured: true,
+      citations: 0,
+      tags: ['Anomalous Hall effect', 'Altermagnets', 'Molecular beam epitaxy'],
+      abstract:
+        'α-MnTe is a prototypical altermagnet exhibiting a strong anomalous Hall effect (AHE), despite having a nearly vanishing magnetization. SrF2⁢(111) has a small lattice mismatch with MnTe and a matching coefficient of thermal expansion; there are, however, no reports on measurements of the AHE in α-MnTe epitaxially grown on this substrate. Here, we report the measurement of an AHE and x-ray magnetic circular dichroism in α-MnTe films grown on SrF2 that have a relaxed crystal structure and nearly vanishing magnetization confirmed experimentally. We study films of varying thickness, all of which exhibit a consistent spontaneous anomalous Hall effect, albeit only at low temperature. With increasing thickness, we find that films become more resistive and that their anomalous Hall conductivity decreases as their longitudinal conductivity decreases. Importantly, a comparison of the anomalous Hall conductivity per unit magnetization with other magnetic semiconductors reveals the colossal amplitude of the AHE of α-MnTe. We carry out this analysis for the films reported here and for previous results from the literature. Such a colossal AHE cannot be explained by a picture where defects induce extrinsic ferromagnetism in this material, and must be a result of the magnetocrystalline symmetry allowing its altermagnetism.',
+      figure: {
+        src: 'assets/img/pubs/mnte-thin-film.png',
+        alt: 'Momentum map at EB = 100 meV of a MnTe thin film sample with dotted lines to indicate the sixfold rotational symmetry.',
+        caption: 'Momentum map at EB = 100 meV. Dotted lines are guides to the eye. Data have been sixfold rotationally averaged.'
+      },
+      links: {
+        aps: 'https://link.aps.org/doi/10.1103/4hdt-17r9',
+        arxiv: '2603.00242',
+        doi: '10.1103/4hdt-17r9',
+      },
+      bibtex:
+        '@article{4hdt-17r9,' +
+          'title = {Large anomalous Hall effect in \ensuremath{\alpha}-MnTe thin films grown on ${\mathrm{SrF}}_{2}(111)$},' +
+          'author = {Bey, Sara and Fields, Shelby S. and Combs, Nicholas G. and M{\'a}rkus, Bence G. and Wang, Jiashu and Schmidt, Liam T. and Curtis, Lincoln and Dodd-Noble, Allecia and Poulin, Alexander and Shahed, Syed Mohammad and Regmi, Resham and Holub, Mariia and Ohresser, Phillipe and Bansil, Arun and Kar, Swastik and Ambaye, Haile and Lauter, Valeria and Forr{\'o}, L{\'a}szl{\'o} and Cress, Cory D. and Prestigiacomo, Joseph C. and Ghimire, Nirmal J. and de la Torre, Alberto and Bennett, Steven P. and Liu, Xinyu and Assaf, Badih A.},' +
+          'journal = {Phys. Rev. B},' +
+          'volume = {114},' +
+          'issue = {19},' +
+          'pages = {194403},' +
+          'numpages = {10},' +
+          'year = {2026},' +
+          'month = {Oct},' +
+          'publisher = {American Physical Society},' +
+          'doi = {10.1103/4hdt-17r9},' +
+          'url = {https://link.aps.org/doi/10.1103/4hdt-17r9}' +
+        '}'
+    },
+
+
+
+
     // {
     //   id: 'astronomer2025-specfit',
     //   title: 'specfit: fast spectral fitting for integral-field data cubes',

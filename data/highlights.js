@@ -53,7 +53,7 @@
       summaryHtml:
         'A fast gui toolkit for CLASSE\'s beamline data, interfacing with <code>nxs-analysis-tools</code>. Focused on producing deltaPDF\'s. ' +
         'Install source <code>git clone https://github.com/poulinal/Classe-GUI-Toolkit.git</code> or download release.',
-      image: 'assets/img/CLADA-home.png',
+      image: 'assets/img/pubs/CLADA-home.png',
       imageAlt: 'Image of the CLADA GUI\'s main window, showing a sample plot and various controls.',
       // link: { href: 'publications.html#astronomer2025-specfit', label: 'See the software paper' }
       link: { href: 'https://github.com/poulinal/Classe-GUI-Toolkit/releases/tag/v0.2.0', label: 'See the software repo'}
@@ -72,7 +72,11 @@
   ];
 
   Site.data.news = [
+    { date: '2026-09-06', textHtml: 'Preparing new paper on my project on redshift dependence on satellite galaxy distribution lopsidedness in TNG300 & TNG-Cluster simulations. Intended to be submitted to <em>ApJ</em>.' },
+    { date: '2026-08-29', textHtml: 'Preparing new paper on my project on F277W-Dropouts in the COSMOS-Web field while at the Cosmic DAWN Center. Intended to be submitted to <em>ApJ</em>.' },
     { date: '2026-08-14', textHtml: 'Gave a talk at the Cosmic DAWN Center during one of their cake-talks.' },
+    { date: '2026-06-06', textHtml: 'Began working on a new project at the COSMIC DAWN Center with Shuowen Jin and Marko Shuntov on F277W-Dropouts.' },
+    { date: '2026-01-12', textHtml: 'Began working on a new co-op project at Boston University on satellite distribution lopsidedness\'s redshift dependence in the TNG simulations with Professor Brainerd' },
     // { date: '2026-07-10', textHtml: 'Invited talk at the Summer Galaxies Workshop.' },
     // { date: '2026-05-14', textHtml: '<code>specfit</code> v1.0 is out on PyPI.' },
     // { date: '2025-11-03', textHtml: 'Awarded the Early Career Research Prize.' },
