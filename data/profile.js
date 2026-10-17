@@ -25,7 +25,7 @@
     heroRole: 'Undergraduate Researcher in Physics & Computer Science',
     // A short (2–3 sentence) intro. HTML allowed.
     introHtml:
-      'I\'m interested in studying <strong>cosmology, the high-redshift universe, and galaxy evolution</strong>. ' +
+      'I\'m interested in studying <strong>cosmology, the high-redshift universe, little red dots, and galaxy evolution</strong>. ' +
       'I enjoy using large deep-field observational surveys and simulations like the IllustrisTNG project to study these topics. ',
       // 'I also build open-source tools that make astronomical data easier to explore.',
     // Buttons under the intro. Remove the array to hide them.
