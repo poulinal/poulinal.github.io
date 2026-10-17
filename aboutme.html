@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--
+  aboutme.html — ABOUT PAGE (bio, interests, positions, education)
+
+  Every page on this site uses the same shell. Content is NOT written here;
+  it lives in data/*.js and is rendered by the controller named in
+  <body data-page="...">. To change what this page shows, edit:
+    data/profile.js      (bio, interests, positions, education, awards)
+  The toolbar and footer are rendered from jss/config.js on every page.
+
+  You can still add hand-written HTML: anything you put inside <main> after
+  <div id="view"> stays on the page, below the generated content.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About</title>
+  <meta name="description" content="Biography, research interests and career.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- MODEL: site config + content (edit these to change the site) -->
+  <script src="jss/config.js"></script>
+  <script src="data/profile.js"></script>
+  <script src="data/highlights.js"></script>
+  <script src="data/publications.js"></script>
+  <script src="data/tutorials.js"></script>
+  <script src="jss/models.js"></script>
+  <!-- VIEW -->
+  <script src="jss/views.js"></script>
+  <!-- CONTROLLER (+ Python kernel service) -->
+  <script src="jss/python-engine.js"></script>
+  <script src="jss/controllers.js"></script>
+  <!-- BOOTSTRAP: must be last -->
+  <script src="jss/script.js"></script>
+</head>
+<body data-page="about">
+  <header id="site-toolbar" class="toolbar"></header>
+
+  <main id="app" class="page">
+    <div id="view">
+      <noscript><p>This site needs JavaScript to display its content.</p></noscript>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="footer"></footer>
+</body>
+</html>

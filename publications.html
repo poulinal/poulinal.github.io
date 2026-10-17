@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+  publications.html — PUBLICATIONS (abstracts, signature plots, filters)
+
+  Every page on this site uses the same shell. Content is NOT written here;
+  it lives in data/*.js and is rendered by the controller named in
+  <body data-page="...">. To change what this page shows, edit:
+    data/publications.js (the list itself)
+    jss/config.js        -> publications (sorting, grouping, labels)
+    assets/img/pubs/     (signature plot images)
+  The toolbar and footer are rendered from jss/config.js on every page.
+
+  You can still add hand-written HTML: anything you put inside <main> after
+  <div id="view"> stays on the page, below the generated content.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publications</title>
+  <meta name="description" content="Publications with abstracts and figures.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- MODEL: site config + content (edit these to change the site) -->
+  <script src="jss/config.js"></script>
+  <script src="data/profile.js"></script>
+  <script src="data/highlights.js"></script>
+  <script src="data/publications.js"></script>
+  <script src="data/tutorials.js"></script>
+  <script src="jss/models.js"></script>
+  <!-- VIEW -->
+  <script src="jss/views.js"></script>
+  <!-- CONTROLLER (+ Python kernel service) -->
+  <script src="jss/python-engine.js"></script>
+  <script src="jss/controllers.js"></script>
+  <!-- BOOTSTRAP: must be last -->
+  <script src="jss/script.js"></script>
+</head>
+<body data-page="publications">
+  <header id="site-toolbar" class="toolbar"></header>
+
+  <main id="app" class="page">
+    <div id="view">
+      <noscript><p>This site needs JavaScript to display its content.</p></noscript>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="footer"></footer>
+</body>
+</html>
