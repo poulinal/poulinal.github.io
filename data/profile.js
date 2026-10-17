@@ -19,7 +19,7 @@
   Site.data.profile = {
 
     /* ---- Home page hero ------------------------------------------------- */
-    photo: 'assets/img/photos/Poulin_Alexander_cropped.JPG',      // square image works best
+    photo: 'assets/img/photos/Poulin_Alexander_cropped.jpg',      // square image works best
     photoAlt: 'Portrait of Alexander Poulin',
     heroHeading: 'Welcome, I’m Alexander Poulin.',
     heroRole: 'Undergraduate Researcher in Physics & Computer Science',
