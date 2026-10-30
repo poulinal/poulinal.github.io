@@ -27,6 +27,7 @@
  *     Site.views.publications              list, filters, single entry, lightbox
  *     Site.views.notebook                  tutorial index, cells, outputs
  *     Site.views.editor                    code editor widget (CodeMirror or <textarea>)
+ *     Site.views.blog                      blog index, single post, body extras
  * ========================================================================== */
 
 (function (Site) {
@@ -273,7 +274,7 @@
           '<h1 class="about__name">' + esc(site.name) + '</h1>' +
           (profile.heroRole ? '<p class="about__role">' + esc(profile.heroRole) + '</p>' : '') +
           (site.affiliation ? '<p class="about__affil">' + esc(site.affiliation) + '</p>' : '') +
-          (profile.cvUrl ? '<a class="btn btn--primary btn--block" ' + linkAttrs(profile.cvUrl, true) + '>Download CV</a>' : '') +
+          (profile.cvUrl ? '<a class="btn btn--primary btn--block" ' + linkAttrs(profile.cvUrl, true) + '>View CV (PDF)</a>' : '') +
           V.socialList(config.social, 'social--stacked') +
         '</aside>' +
         '<div class="about__main">' +
@@ -615,6 +616,348 @@
         focus:    function () { ta.focus(); },
         refresh:  grow
       };
+    }
+  };
+
+  /* =========================================================================
+   * BLOG PAGE
+   * The index (header, filters, post cards) and a single post. A post's
+   * body is markdown; `expand` turns the blog-specific extras (figures,
+   * videos, tutorial/publication cards, callouts, citations) into HTML
+   * before the controller hands the result to the markdown renderer.
+   * ====================================================================== */
+
+  var CALLOUT_TITLES = {
+    note: 'Note', key: 'Key idea', definition: 'Definition', tip: 'Tip', question: 'Something to think about'
+  };
+
+  /** Slug safe for use in an id attribute. */
+  function slug(s) {
+    return String(s || '').toLowerCase().replace(/<[^>]*>/g, '').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-');
+  }
+  V.slug = slug;
+
+  /** YouTube / Vimeo page URL -> embeddable player URL (null for plain video files). */
+  function embedUrl(url) {
+    var m = /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/.exec(url);
+    if (m) return 'https://www.youtube-nocookie.com/embed/' + m[1];
+    m = /vimeo\.com\/(?:video\/)?(\d+)/.exec(url);
+    if (m) return 'https://player.vimeo.com/video/' + m[1];
+    return null;
+  }
+
+  V.blog = {
+
+    /** Logo, title and tagline at the top of the index. */
+    header: function (blogCfg) {
+      return '<header class="blog-head">' +
+        (blogCfg.logo ? '<img class="blog-head__logo" src="' + esc(blogCfg.logo) + '" alt="' + esc(blogCfg.logoAlt || '') + '">' : '') +
+        '<div><h1 class="blog-head__title">' + esc(blogCfg.title || 'Blog') + '</h1>' +
+        (blogCfg.taglineHtml ? '<p class="blog-head__tagline">' + blogCfg.taglineHtml + '</p>' : '') +
+        '</div></header>';
+    },
+
+    controls: function (state, keywords, categories, categoryLabel) {
+      var cats = categories.length > 1
+        ? '<select name="category" aria-label="Category"><option value="">All categories</option>' +
+          categories.map(function (c) {
+            return '<option value="' + esc(c) + '"' + (c === state.category ? ' selected' : '') + '>' + esc(categoryLabel(c)) + '</option>';
+          }).join('') + '</select>'
+        : '';
+      var chips = keywords.map(function (k) {
+        var on = k.keyword.toLowerCase() === state.keyword.toLowerCase();
+        return '<button class="chip blog-kw' + (on ? ' is-active' : '') + '" type="button" data-action="filter-keyword" ' +
+          'data-keyword="' + esc(k.keyword) + '" aria-pressed="' + on + '">' + esc(k.keyword) +
+          '<span class="blog-kw__count">' + k.count + '</span></button>';
+      }).join('');
+      return '<form class="filters blog-filters" role="search" data-role="filters">' +
+        '<input class="filters__search" type="search" name="q" placeholder="Search posts and keywords…" value="' + esc(state.q) + '" aria-label="Search posts">' +
+        cats +
+        '</form>' +
+        (chips ? '<div class="blog-kws" aria-label="Keywords"><span class="blog-kws__label">Keywords</span>' + chips + '</div>' : '');
+    },
+
+    meta: function (post, helpers) {
+      return join([
+        post.category ? '<span class="badge blog-badge">' + esc(helpers.categoryLabel(post.category)) + '</span>' : '',
+        '<time datetime="' + esc(post.date) + '">' + V.formatDate(post.date) + '</time>',
+        '<span>' + helpers.readingTime(post) + ' min read</span>'
+      ], '<span class="dot">·</span>');
+    },
+
+    card: function (post, helpers) {
+      var thumb = post.thumbnail || post.cover;
+      var credit = thumb ? this.creditText(thumb, helpers.references(post)) : '';
+      return '<a class="blog-card" href="?p=' + encodeURIComponent(post.id) + '">' +
+        (thumb && thumb.src
+          ? '<div class="blog-card__media"><img src="' + esc(thumb.src) + '" alt="' + esc(thumb.alt || '') + '" loading="lazy">' +
+            (credit ? '<p class="blog-card__credit">Image: ' + esc(credit) + '</p>' : '') + '</div>'
+          : '') +
+        '<div class="blog-card__body">' +
+          '<p class="blog-meta">' + this.meta(post, helpers) + '</p>' +
+          '<h2 class="blog-card__title">' + esc(post.title) + '</h2>' +
+          (post.summary ? '<p class="blog-card__summary">' + post.summary + '</p>' : '') +
+          ((post.keywords || []).length
+            ? '<p class="blog-card__kws">' + post.keywords.map(function (k) { return '<span>#' + esc(k) + '</span>'; }).join(' ') + '</p>'
+            : '') +
+        '</div></a>';
+    },
+
+    list: function (posts, helpers) {
+      var self = this;
+      if (!posts.length) {
+        return '<div class="empty">No posts match. ' +
+          '<button class="btn btn--ghost btn--sm" type="button" data-action="clear-filters">Clear filters</button></div>';
+      }
+      return posts.map(function (p) { return self.card(p, helpers); }).join('');
+    },
+
+    count: function (shown, total, keyword) {
+      if (shown === total) return '';
+      return 'Showing ' + shown + ' of ' + total + ' posts' + (keyword ? ' tagged “' + esc(keyword) + '”' : '');
+    },
+
+    /**
+     * One post. `body` is a placeholder the controller fills with rendered
+     * markdown. `ctx` = { helpers, references, cited, marks, related, neighbours, author },
+     * where `marks` holds the citation markers for { cover, thumbnail }.
+     */
+    post: function (post, ctx) {
+      var h = ctx.helpers;
+      var style = Object.keys(post.style || {}).map(function (k) { return esc(k) + ':' + esc(post.style[k]); }).join(';');
+      var kws = (post.keywords || []).map(function (k) {
+        return '<a class="chip blog-kw" href="?kw=' + encodeURIComponent(k) + '">' + esc(k) + '</a>';
+      }).join('');
+      var marks = ctx.marks || {};
+      var coverCredit = post.cover ? this.credit(post.cover, ctx.references, marks.cover) : '';
+      var cover = post.cover && post.cover.src
+        ? '<figure class="blog-cover"><img src="' + esc(post.cover.src) + '" alt="' + esc(post.cover.alt || '') + '">' +
+          (post.cover.caption || coverCredit
+            ? '<figcaption>' + join([post.cover.caption, coverCredit], ' ') + '</figcaption>'
+            : '') + '</figure>'
+        : '';
+      var thumbCredit = post.thumbnail ? this.credit(post.thumbnail, ctx.references, marks.thumbnail, 'Thumbnail image') : '';
+      return '<article class="blog-post"' + (style ? ' style="' + style + '"' : '') + '>' +
+        '<a class="blog-back" href="blog.html">' + V.icon('back') + ' All posts</a>' +
+        (post.draft ? '<p class="blog-draft">Draft: hidden from the post list, visible only by direct link.</p>' : '') +
+        '<header class="blog-post__head">' +
+          '<p class="blog-meta">' + this.meta(post, h) + '</p>' +
+          '<h1 class="blog-post__title">' + esc(post.title) + '</h1>' +
+          (post.summary ? '<p class="blog-post__summary">' + post.summary + '</p>' : '') +
+          '<p class="blog-post__byline">By ' + esc(post.author || ctx.author) +
+            (post.updated ? ' · Updated <time datetime="' + esc(post.updated) + '">' + V.formatDate(post.updated) + '</time>' : '') + '</p>' +
+          (kws ? '<div class="blog-post__kws">' + kws + '</div>' : '') +
+        '</header>' +
+        cover +
+        '<div class="blog-prose prose" data-role="body"><p class="blog-loading">Loading…</p></div>' +
+        this.references(ctx.references, ctx.cited) +
+        (thumbCredit ? '<p class="blog-credits">' + thumbCredit + '</p>' : '') +
+        this.related(ctx.related) +
+        this.pager(ctx.neighbours) +
+      '</article>';
+    },
+
+    /**
+     * Plain-text credit for an image { credit, cite }: the credit text, or
+     * "Author et al. (year)" from the cited reference. Used on post cards,
+     * which are links themselves and so can't contain citation links.
+     */
+    creditText: function (img, references) {
+      if (img.credit) return String(img.credit).replace(/<[^>]*>/g, '');
+      var r = img.cite && (references || []).filter(function (x) { return x.key === img.cite; })[0];
+      return r ? this.refLabel(r) : '';
+    },
+
+    /** "<label>: <credit> [n]" (HTML allowed) for an image on the post page; `mark` is its citation marker. */
+    credit: function (img, references, mark, label) {
+      var text = img.credit || this.creditText(img, references);
+      if (!text && !mark) return '';
+      return '<span class="blog-credit">' + esc(label || 'Image') + ': ' + join([text, mark], ' ') + '</span>';
+    },
+
+    /**
+     * Citation marker for `keys`, e.g. <sup>[1, 3]</sup>. `state` = { cited, uses }
+     * is shared by everything on one post so numbers follow the order of first use.
+     */
+    cite: function (keys, refs, state) {
+      var self = this;
+      var marks = keys.map(function (k) {
+        var r = refs[k];
+        if (!r) {
+          console.warn('[site] Blog citation [@' + k + '] has no matching entry in references');
+          return '<span class="cite--missing">?' + esc(k) + '</span>';
+        }
+        if (state.cited.indexOf(k) === -1) state.cited.push(k);
+        state.uses[k] = (state.uses[k] || 0) + 1;
+        return '<a href="#ref-' + slug(k) + '" id="cite-' + slug(k) + '-' + state.uses[k] + '" title="' + esc(self.refLabel(r)) + '">' +
+          (state.cited.indexOf(k) + 1) + '</a>';
+      });
+      return '<sup class="cite">[' + marks.join(', ') + ']</sup>';
+    },
+
+    /** "Smith, Jones & Lee" / "Smith et al." */
+    shortAuthors: function (authors) {
+      var a = (authors || []).filter(function (x) { return x !== 'et al.'; }).map(function (n) {
+        n = String(n);
+        return n.indexOf(',') !== -1 ? n.split(',')[0].trim() : n.trim().split(/\s+/).pop();
+      });
+      if (a.length > 2 || (authors || []).indexOf('et al.') !== -1) return a[0] + ' et al.';
+      return a.join(' & ');
+    },
+
+    /** Tooltip text for a citation marker, e.g. "Nelson et al. (2019)". */
+    refLabel: function (r) {
+      return join([this.shortAuthors(r.authors), r.year ? '(' + r.year + ')' : ''], ' ');
+    },
+
+    reference: function (r) {
+      var authors = (r.authors || []).length > 6
+        ? r.authors.slice(0, 3).join(', ') + ', et al.'
+        : (r.authors || []).join(', ');
+      var doiHref = r.doi ? (/^https?:/.test(r.doi) ? r.doi : 'https://doi.org/' + r.doi) : '';
+      var arxivHref = r.arxiv ? (/^https?:/.test(r.arxiv) ? r.arxiv : 'https://arxiv.org/abs/' + r.arxiv) : '';
+      var links = [
+        r.url ? '<a ' + linkAttrs(r.url) + '>Link</a>' : '',
+        doiHref ? '<a ' + linkAttrs(doiHref) + '>DOI</a>' : '',
+        arxivHref ? '<a ' + linkAttrs(arxivHref) + '>arXiv</a>' : ''
+      ].filter(Boolean).join(' · ');
+      return join([
+        authors ? esc(authors) + (r.year ? ' (' + esc(r.year) + ').' : '.') : (r.year ? '(' + esc(r.year) + ').' : ''),
+        r.title ? esc(r.title) + '.' : '',
+        r.journal ? join(['<em>' + esc(r.journal) + '</em>', esc(r.volume), esc(r.pages)], ', ') + '.' : '',
+        r.note ? r.note : '',
+        links ? '<span class="blog-refs__links">' + links + '</span>' : ''
+      ], ' ');
+    },
+
+    /** Numbered reference list: cited entries in citation order, then the rest. */
+    references: function (refs, cited) {
+      if (!refs || !refs.length) return '';
+      var self = this;
+      var byKey = {};
+      refs.forEach(function (r) { byKey[r.key] = r; });
+      var ordered = cited.filter(function (k) { return byKey[k]; }).map(function (k) { return byKey[k]; })
+        .concat(refs.filter(function (r) { return cited.indexOf(r.key) === -1; }));
+      return '<section class="blog-refs" aria-labelledby="references"><h2 id="references">References</h2><ol>' +
+        ordered.map(function (r) {
+          var back = cited.indexOf(r.key) !== -1
+            ? ' <a class="blog-refs__back" href="#cite-' + slug(r.key) + '-1" aria-label="Back to text">↩</a>'
+            : '';
+          return '<li id="ref-' + slug(r.key) + '">' + self.reference(r) + back + '</li>';
+        }).join('') + '</ol></section>';
+    },
+
+    /** "Related" box: publications, tutorials and free links. */
+    related: function (rel) {
+      if (!rel) return '';
+      var items = []
+        .concat((rel.publications || []).map(function (p) {
+          return '<li><span class="badge">Paper</span> <a href="publications.html#' + esc(p.id) + '">' + esc(p.title) + '</a></li>';
+        }))
+        .concat((rel.tutorials || []).map(function (t) {
+          return '<li><span class="badge">Tutorial</span> <a href="runcode-template.html?t=' + encodeURIComponent(t.id) + '">' + esc(t.title) + '</a></li>';
+        }))
+        .concat((rel.links || []).map(function (l) {
+          return '<li><span class="badge">Link</span> <a ' + linkAttrs(l.href) + '>' + esc(l.label) + '</a></li>';
+        }));
+      if (!items.length) return '';
+      return '<aside class="blog-related"><h2>Related</h2><ul>' + items.join('') + '</ul></aside>';
+    },
+
+    pager: function (n) {
+      if (!n || (!n.newer && !n.older)) return '';
+      function link(p, dir, label) {
+        return p
+          ? '<a class="blog-pager__' + dir + '" href="?p=' + encodeURIComponent(p.id) + '"><span>' + label + '</span>' + esc(p.title) + '</a>'
+          : '<span></span>';
+      }
+      return '<nav class="blog-pager" aria-label="More posts">' + link(n.older, 'older', '← Older') + link(n.newer, 'newer', 'Newer →') + '</nav>';
+    },
+
+    notFound: function (id) {
+      return '<div class="empty"><h1>Post not found</h1><p>No post with id “' + esc(id) + '”.</p>' +
+        '<a class="btn btn--primary" href="blog.html">All posts</a></div>';
+    },
+
+    /* ---- body extras -------------------------------------------------- */
+
+    figure: function (n, args) {
+      var src = args[0], caption = args[1] || '', alt = args[2] || caption.replace(/<[^>]*>|\$|\s*\[\s*@[^\]]*\]/g, '').trim(), width = args[3];
+      return '<figure class="blog-figure"' + (width ? ' style="max-width:' + esc(width) + '"' : '') + '>' +
+        '<a href="' + esc(src) + '" target="_blank" rel="noopener" title="Open full size"><img src="' + esc(src) + '" alt="' + esc(alt) + '" loading="lazy"></a>' +
+        '<figcaption><span class="blog-figure__num">Figure ' + n + '.</span> ' + caption + '</figcaption></figure>';
+    },
+
+    video: function (args) {
+      var url = args[0], caption = args[1] || '', embed = embedUrl(url);
+      var player = embed
+        ? '<div class="blog-video__frame"><iframe src="' + esc(embed) + '" title="' + esc(caption.replace(/<[^>]*>/g, '') || 'Video') + '" loading="lazy" ' +
+          'allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>'
+        : '<video class="blog-video__file" src="' + esc(url) + '" controls preload="metadata" playsinline></video>';
+      return '<figure class="blog-video">' + player + (caption ? '<figcaption>' + caption + '</figcaption>' : '') + '</figure>';
+    },
+
+    tutorialCard: function (id, label, tutorial) {
+      var title = label || (tutorial && tutorial.title) || 'Interactive Python tutorial';
+      return '<div class="blog-embed"><a class="blog-embed__link" href="runcode-template.html' + (id ? '?t=' + encodeURIComponent(id) : '') + '">' +
+        '<span class="blog-embed__kind">' + V.icon('play') + ' Try it yourself</span>' +
+        '<span class="blog-embed__title">' + esc(title) + '</span>' +
+        (tutorial && tutorial.summary ? '<span class="blog-embed__text">' + esc(tutorial.summary) + '</span>' : '') +
+        '<span class="blog-embed__cta">Open the tutorial ' + V.icon('arrow') + '</span></a></div>';
+    },
+
+    pubCard: function (id, pub) {
+      if (!pub) return '<p class="cite--missing">[unknown publication “' + esc(id) + '”]</p>';
+      return '<div class="blog-embed blog-embed--pub"><a class="blog-embed__link" href="publications.html#' + esc(pub.id) + '">' +
+        (pub.figure && pub.figure.src ? '<img class="blog-embed__thumb" src="' + esc(pub.figure.src) + '" alt="" loading="lazy">' : '') +
+        '<span class="blog-embed__kind">Publication</span>' +
+        '<span class="blog-embed__title">' + esc(pub.title) + '</span>' +
+        '<span class="blog-embed__text">' + join([esc(pub.journal), esc(pub.year)], ' · ') + '</span>' +
+        '<span class="blog-embed__cta">View publication ' + V.icon('arrow') + '</span></a></div>';
+    },
+
+    /**
+     * Expand blog extras in a markdown body. Returns { text, cited } where
+     * `cited` lists reference keys in order of first citation.
+     *   ctx.refs        { key: resolved reference }
+     *   ctx.tutorial    id -> tutorial or null
+     *   ctx.publication id -> publication or null
+     *   ctx.state       optional { cited, uses } shared with other citations on the page
+     * Code (~~~ fences, ``` fences, <pre>, <code>) is left untouched.
+     */
+    expand: function (src, ctx) {
+      var self = this, code = [], figures = 0;
+      var state = ctx.state || { cited: [], uses: {} };
+
+      var text = String(src || '').replace(/~~~[\s\S]*?~~~|```[\s\S]*?```|<pre[\s\S]*?<\/pre>|<code[\s\S]*?<\/code>/g, function (m) {
+        code.push(m);
+        return '@@CODE' + (code.length - 1) + '@@';
+      });
+
+      // ::: kind Optional title  ...  :::
+      text = text.replace(/^:::[ \t]*(\w+)[ \t]*(.*)\n([\s\S]*?)\n:::[ \t]*$/gm, function (_, kind, title, body) {
+        kind = kind.toLowerCase();
+        return '<aside class="callout callout--' + esc(kind) + '"><p class="callout__title">' + (title.trim() || CALLOUT_TITLES[kind] || 'Note') + '</p>\n\n' +
+          body + '\n\n</aside>';
+      });
+
+      // {{figure ...}} {{video ...}} {{tutorial ...}} {{pub ...}} on a line of their own
+      text = text.replace(/^[ \t]*\{\{[ \t]*(figure|video|tutorial|pub)[ \t]+(.*)\}\}[ \t]*$/gm, function (_, kind, rest) {
+        var args = rest.split('|').map(function (s) { return s.trim(); });
+        var html = kind === 'figure' ? self.figure(++figures, args)
+          : kind === 'video' ? self.video(args)
+          : kind === 'tutorial' ? self.tutorialCard(args[0], args[1], ctx.tutorial(args[0]))
+          : self.pubCard(args[0], ctx.publication(args[0]));
+        return '\n\n' + html + '\n\n';
+      });
+
+      // [@key] and [@key1; @key2]
+      text = text.replace(/\[\s*(@[\w:.\/-]+(?:\s*[;,]\s*@[\w:.\/-]+)*)\s*\]/g, function (_, list) {
+        return self.cite(list.split(/[;,]/).map(function (k) { return k.trim().slice(1); }), ctx.refs, state);
+      });
+
+      text = text.replace(/@@CODE(\d+)@@/g, function (_, i) { return code[+i]; });
+      return { text: text, cited: state.cited };
     }
   };
 

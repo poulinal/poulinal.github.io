@@ -15,6 +15,7 @@
  *   Site.models.news           -> news items, sorted
  *   Site.models.publications   -> query / facets / link normalisation
  *   Site.models.tutorials      -> tutorial look-up
+ *   Site.models.blog           -> blog posts: search, keywords, references
  *   Site.models.prefs          -> small per-visitor preferences (localStorage)
  * ========================================================================== */
 
@@ -197,6 +198,114 @@
         packages: [],
         cells: [{ type: 'code', source: (config.notebook && config.notebook.newCellTemplate) || '' }]
       };
+    }
+  };
+
+  /* ---- blog ---------------------------------------------------------- */
+
+  Site.models.blog = {
+
+    /** All posts, drafts included, pinned first then newest first. */
+    all: function () {
+      return (data.blog || []).slice().sort(function (a, b) {
+        if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+        return byDateDesc(a, b);
+      });
+    },
+
+    /** Posts shown in the index (drafts are only reachable by direct link). */
+    published: function () {
+      return this.all().filter(function (p) { return !p.draft; });
+    },
+
+    byId: function (id) {
+      return this.all().filter(function (p) { return p.id === id; })[0] || null;
+    },
+
+    /**
+     * Filter the published posts.
+     *   q         free-text search over title, summary, keywords, body
+     *   keyword   post must have this keyword (case-insensitive, '' = any)
+     *   category  exact match on post.category ('' = any)
+     */
+    query: function (opts) {
+      opts = opts || {};
+      var terms = normalise(opts.q).split(/\s+/).filter(Boolean);
+      var kw = normalise(opts.keyword);
+      return this.published().filter(function (p) {
+        if (opts.category && p.category !== opts.category) return false;
+        if (kw && (p.keywords || []).map(normalise).indexOf(kw) === -1) return false;
+        if (terms.length) {
+          var hay = normalise([
+            p.title, stripHtml(p.summary), (p.keywords || []).join(' '), p.category, p.body
+          ].join(' '));
+          return terms.every(function (t) { return hay.indexOf(t) !== -1; });
+        }
+        return true;
+      });
+    },
+
+    /** [{ keyword, count }] over published posts, most used first. */
+    keywords: function () {
+      var counts = {}, labels = {};
+      this.published().forEach(function (p) {
+        (p.keywords || []).forEach(function (k) {
+          var n = normalise(k);
+          counts[n] = (counts[n] || 0) + 1;
+          if (!labels[n]) labels[n] = k;
+        });
+      });
+      return Object.keys(counts)
+        .map(function (n) { return { keyword: labels[n], count: counts[n] }; })
+        .sort(function (a, b) { return (b.count - a.count) || a.keyword.localeCompare(b.keyword); });
+    },
+
+    categories: function () {
+      return unique(this.published().map(function (p) { return p.category; })).filter(Boolean);
+    },
+
+    categoryLabel: function (cat) {
+      var labels = (config.blog && config.blog.categoryLabels) || {};
+      return labels[cat] || cat || '';
+    },
+
+    /** Estimated reading time in minutes (at least 1). */
+    readingTime: function (post) {
+      var wpm = (config.blog && config.blog.wordsPerMinute) || 200;
+      var words = stripHtml(post.body).split(/\s+/).filter(Boolean).length;
+      return Math.max(1, Math.round(words / wpm));
+    },
+
+    /** The published posts immediately newer and older than `post` (by date). */
+    neighbours: function (post) {
+      var list = this.published().slice().sort(byDateDesc);
+      var i = list.indexOf(post);
+      if (i === -1) return { newer: null, older: null };
+      return { newer: list[i - 1] || null, older: list[i + 1] || null };
+    },
+
+    /**
+     * Resolve a post's references. Entries of the form { key, pub: '<id>' }
+     * are filled in from data/publications.js; others are used as written.
+     */
+    references: function (post) {
+      return (post.references || []).map(function (r) {
+        if (!r.pub) return r;
+        var p = Site.models.publications.byId(r.pub);
+        if (!p) {
+          console.warn('[site] Blog reference "' + r.key + '" points to unknown publication "' + r.pub + '"');
+          return r;
+        }
+        var doi = p.links && p.links.doi;
+        return {
+          key: r.key,
+          authors: p.authors, year: p.year, title: p.title,
+          journal: p.journal, volume: p.volume, pages: p.pages,
+          doi: doi, arxiv: p.links && p.links.arxiv,
+          url: 'publications.html#' + p.id,
+          note: r.note
+        };
+      });
     }
   };
 

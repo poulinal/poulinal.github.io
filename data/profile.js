@@ -85,7 +85,9 @@
 
     // Link to a PDF of your CV (put the file in assets/). null hides the button.
     // cvUrl: null // e.g. 'assets/cv.pdf'
-    cvUrl: 'poulinal.github.io/assets/Alexander Poulin – CV – Cambridge Final.pdf'
+    // Path relative to the site root (no domain). Opens in a new tab, where the
+    // browser's PDF viewer lets visitors read it or download it.
+    cvUrl: 'assets/Alexander Poulin – CV – Cambridge Final.pdf'
 
 
     //TODO: should i add a section for presentations?

@@ -43,7 +43,7 @@
         'In TNG100 we find that magnetic fields in satellite galaxies are stronger than in central galaxies of the same stellar mass.',
       image: 'assets/img/pubs/rnaasadce74f1_lr.jpg',
       imageAlt: 'Log-Log plot of magnetic field strength vs stellar mass for TNG100 galaxies, showing satellites have stronger fields than centrals at the same mass.',
-      link: { href: 'publications.html#astronomer2026-cores', label: 'Read the paper' },
+      link: { href: 'publications.html#RNAAS-magnetic-fields-2025', label: 'Read the paper' },
       pinned: true
     },
     {

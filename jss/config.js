@@ -75,7 +75,8 @@
       { id: 'home',         label: 'Home',         href: 'index.html' },
       { id: 'about',        label: 'About',        href: 'aboutme.html' },
       { id: 'publications', label: 'Publications', href: 'publications.html' },
-      { id: 'tutorials',    label: 'Tutorials',    href: 'runcode-template.html' }
+      { id: 'tutorials',    label: 'Tutorials',    href: 'runcode-template.html' },
+      { id: 'blog',         label: 'Blog',         href: 'blog.html' }
       // Files and external links work too, e.g. once you add assets/cv.pdf:
       // { id: 'cv', label: 'CV', href: 'assets/cv.pdf', newTab: true }
     ],
@@ -197,6 +198,63 @@
       newCellTemplate: '# Write some Python here, then press Shift+Enter\n',
       // Resolution of inline matplotlib figures.
       figureDpi: 100
+    },
+
+    /* -------------------------------------------------------------------------
+     * BLOG PAGE OPTIONS (blog.html; posts live in data/blog.js)
+     * ---------------------------------------------------------------------- */
+    blog: {
+      title: 'Research Notes',
+      // Shown under the title. HTML allowed.
+      taglineHtml: 'Plain-language write-ups of simulations, new papers and the ideas behind them, ' +
+        'written for students and early-career researchers.',
+      // Your blog logo, shown next to the title (and as the blog's browser-tab
+      // icon — update the <link rel="icon"> in blog.html too). SVG or PNG,
+      // square works best. Set to null to hide.
+      logo: 'assets/icons/logo_budding_universe_centered.svg',
+      logoAlt: '',
+
+      // Labels for the `category` field of each post.
+      categoryLabels: {
+        simulation: 'Simulation',
+        publication: 'New paper',
+        tutorial: 'Tutorial',
+        notes: 'Notes',
+        review: 'Review'
+      },
+      wordsPerMinute: 200,
+
+      // Fonts used only on the blog. Must match the families in `theme` below.
+      fontsUrl: ['https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap', 'https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap'],
+
+      // Blog look: same rules as `theme` above (override the --blog-* CSS
+      // variables in css/style.css, section 14). Change text and heading
+      // fonts, sizes and colours here; a single post can override any of
+      // these with its own `style` field (see data/blog.js).
+      theme: {
+        shared: {
+          '--blog-font-body': "'Source Serif 4', Georgia, 'Times New Roman', serif",
+          '--blog-font-heading': "'Quantico', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif",
+          '--blog-text-size': '1.125rem',       // paragraph text
+          '--blog-line-height': '1.75',
+          '--blog-h1-size': 'clamp(2rem, 3vw + 1rem, 2.75rem)',
+          '--blog-h2-size': '1.6rem',
+          '--blog-h3-size': '1.25rem',
+          '--blog-measure': '44rem'              // width of the text column
+        },
+        light: {
+          '--blog-red':  '#c8102e',
+          '--blog-blue': '#1f4fbf',
+          '--blog-heading-color': '#141824',
+          '--blog-text-color': '#252a36'
+        },
+        dark: {
+          '--blog-red':  '#ff6b70',
+          '--blog-blue': '#8ea6ff',
+          '--blog-heading-color': '#f1f3f8',
+          '--blog-text-color': '#dde1e9'
+        }
+      }
     },
 
     /* -------------------------------------------------------------------------

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Blog logo">
+  <!-- Placeholder blog logo: replace this file with your own (keep the name,
+       or point config.blog.logo at a new file). -->
+  <rect width="64" height="64" rx="14" fill="#ffffff"/>
+  <ellipse cx="32" cy="32" rx="24" ry="10" fill="none" stroke="#1f4fbf" stroke-width="4" transform="rotate(-30 32 32)"/>
+  <ellipse cx="32" cy="32" rx="24" ry="10" fill="none" stroke="#c8102e" stroke-width="4" transform="rotate(30 32 32)"/>
+  <circle cx="32" cy="32" r="5" fill="#141824"/>
+</svg>

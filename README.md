@@ -1,6 +1,6 @@
 # poulinal.github.io
 
-A personal academic website for an astrophysicist, built with plain HTML, CSS and JavaScript. There's no build step and no framework, and it's hosted free on GitHub Pages.
+A personal academic website for an astrophysicist, built with plain HTML, CSS and JavaScript, hosted free on GitHub Pages.
 
 | Page | File | What it shows |
 |---|---|---|
@@ -11,18 +11,19 @@ A personal academic website for an astrophysicist, built with plain HTML, CSS an
 
 All four pages share the same toolbar and footer, which are generated from one config file.
 
-> **Everything shipped here is placeholder content** ("Ada Astronomer", made-up papers, generated plots). Replace it with your own before publishing.
-
 ---
 
 ## Contents
 
 1. [Quick start](#1-quick-start)
 2. [How the code is organised (MVC)](#2-how-the-code-is-organised-mvc)
+<!-- 
 3. [Customisation cookbook](#3-customisation-cookbook)
 4. [Writing tutorials](#4-writing-tutorials)
+4b. [Writing blog posts](#4b-writing-blog-posts)
 5. [Deploying](#5-deploying)
-6. [Troubleshooting](#6-troubleshooting)
+6. [Troubleshooting](#6-troubleshooting) 
+-->
 
 ---
 
@@ -36,7 +37,7 @@ python3 -m http.server 8000
 
 You can also double-click any `.html` file. Most things work from `file://`; see [Troubleshooting](#6-troubleshooting) for the few exceptions.
 
-**To make the site yours, edit these files in order:**
+**These are the customizable files**
 
 1. `jss/config.js`: name, toolbar links, social links, colours
 2. `data/profile.js`: photo, intro, bio, career
@@ -77,6 +78,7 @@ poulinal.github.io/
 └── tools/bib2js.py         BibTeX → publications.js converter
 ```
 
+<!--
 ### How a page loads
 
 ```
@@ -233,6 +235,19 @@ x.mean()` }
 
 ---
 
+## 4b. Writing blog posts
+
+Posts live in `data/blog.js`, one object per post, with a short reference guide at the top of the file. Open `blog.html?p=style-guide` to see every feature next to its source. That post is a draft, so it's hidden from the list.
+
+- **Body:** markdown inside `String.raw\`...\``, with LaTeX (`$...$`, `$$...$$`), images, links and raw HTML. Use `~~~` for code fences and `<code>` for inline code.
+- **Extras:** each goes on its own line. `{{figure src | caption | alt | width}}`, `{{video youtube-or-vimeo-or-mp4 | caption}}`, `{{tutorial id}}`, `{{pub publication-id}}`, plus callout boxes (`::: key` … `:::`; kinds `note`, `key`, `definition`, `tip`, `question`).
+- **Citations:** `[@key]` or `[@a; @b]` in the text, with a matching entry in the post's `references`. Use `{ key, pub: '<id>' }` for your own papers from `data/publications.js`. References are numbered in citation order and listed at the end.
+- **Keywords:** the `keywords` array becomes clickable chips. Readers can filter (`blog.html?kw=TNG100`) and search them.
+- **Look:** `config.blog` sets the title, tagline, logo (`assets/icons/blog-logo.svg` is a placeholder, so replace it), fonts, text and heading sizes, and the red/blue accents for light and dark mode. A single post can override any `--blog-*` variable with its `style` field.
+- **Drafts:** `draft: true` hides a post from the list but keeps it reachable at `blog.html?p=<id>`, so you can preview it before announcing it.
+
+---
+
 ## 5. Deploying
 
 The repository is named `poulinal.github.io`, so GitHub Pages serves it automatically at `https://poulinal.github.io` once it's pushed to `main` (*Settings → Pages → Deploy from branch → main / root*).
@@ -251,3 +266,5 @@ There's no build step, so whatever is committed is what gets served. GitHub Page
 | Math shows as raw `$...$` | Check `features.math: true` and that backslashes are doubled in normal JS strings (or use `String.raw`). |
 | Filters don't appear in the URL | Browsers block `history.replaceState` on `file://`. It works on a local server and on GitHub Pages. |
 | A literal `$` gets turned into math | Wrap it in `<code>`, or turn math off. |
+
+--> 

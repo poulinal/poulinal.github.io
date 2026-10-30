@@ -506,4 +506,168 @@
 
   C.Notebook = Notebook;
 
+  /* =========================================================================
+   * BLOG — blog.html
+   *   no ?p=          -> post list (filters synced to ?q=&kw=&category=)
+   *   ?p=<id>         -> that post
+   *   ?kw=<keyword>   -> post list filtered by keyword
+   * ====================================================================== */
+
+  C.blog = {
+
+    URL_KEYS: { q: 'q', keyword: 'kw', category: 'category' },
+
+    init: function (view) {
+      var params = Site.util.params();
+      var blogCfg = cfg().blog || {};
+      [].concat(blogCfg.fontsUrl || []).forEach(Site.util.loadCss);
+      this.view = view;
+      this.helpers = {
+        categoryLabel: M.blog.categoryLabel.bind(M.blog),
+        readingTime: M.blog.readingTime.bind(M.blog),
+        references: M.blog.references.bind(M.blog)
+      };
+      var id = params.get('p');
+      if (id) this.showPost(id);
+      else this.showIndex(params);
+    },
+
+    /* ---- index -------------------------------------------------------- */
+
+    showIndex: function (params) {
+      var self = this, view = this.view;
+      this.state = {
+        q: params.get('q') || '',
+        keyword: params.get('kw') || '',
+        category: params.get('category') || ''
+      };
+      view.innerHTML = '<div class="blog">' +
+        V.blog.header(cfg().blog || {}) +
+        '<div data-role="controls"></div>' +
+        '<p class="filters__count" data-role="count" aria-live="polite"></p>' +
+        '<div class="blog-list" data-role="list"></div></div>';
+      this.renderControls();
+      this.renderList();
+
+      view.addEventListener('submit', function (e) { e.preventDefault(); });
+      var timer = null;
+      view.addEventListener('input', function (e) {
+        if (e.target.name !== 'q') return;
+        clearTimeout(timer);
+        timer = setTimeout(function () { self.state.q = e.target.value; self.renderList(); }, 150);
+      });
+      view.addEventListener('change', function (e) {
+        if (e.target.name !== 'category') return;
+        self.state.category = e.target.value;
+        self.renderList();
+      });
+      onAction(view, {
+        'filter-keyword': function (el) {
+          var k = el.getAttribute('data-keyword');
+          self.state.keyword = self.state.keyword.toLowerCase() === k.toLowerCase() ? '' : k;
+          self.renderControls();
+          self.renderList();
+        },
+        'clear-filters': function () {
+          self.state.q = self.state.keyword = self.state.category = '';
+          self.renderControls();
+          self.renderList();
+        }
+      });
+    },
+
+    renderControls: function () {
+      this.view.querySelector('[data-role="controls"]').innerHTML =
+        V.blog.controls(this.state, M.blog.keywords(), M.blog.categories(), this.helpers.categoryLabel);
+    },
+
+    renderList: function () {
+      var posts = M.blog.query(this.state);
+      var list = this.view.querySelector('[data-role="list"]');
+      list.innerHTML = V.blog.list(posts, this.helpers);
+      this.view.querySelector('[data-role="count"]').innerHTML =
+        V.blog.count(posts.length, M.blog.published().length, this.state.keyword);
+      Site.util.renderMath(list);
+      this.syncUrl();
+    },
+
+    syncUrl: function () {
+      var s = this.state, keys = this.URL_KEYS;
+      var params = new URLSearchParams();
+      Object.keys(keys).forEach(function (k) { if (s[k]) params.set(keys[k], s[k]); });
+      var qs = params.toString();
+      try {
+        history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
+      } catch (e) { /* file:// in some browsers */ }
+    },
+
+    /* ---- single post -------------------------------------------------- */
+
+    showPost: function (id) {
+      var view = this.view;
+      var post = M.blog.byId(id);
+      if (!post) {
+        view.innerHTML = V.blog.notFound(id);
+        return;
+      }
+      document.title = post.title + ' · ' + ((cfg().site || {}).shortName || '');
+      if (post.summary) {
+        var meta = document.querySelector('meta[name="description"]');
+        if (meta) meta.setAttribute('content', post.summary.replace(/<[^>]*>/g, ''));
+      }
+
+      var references = M.blog.references(post);
+      var refs = {};
+      references.forEach(function (r) { refs[r.key] = r; });
+      // One numbering for the whole post: the cover comes first on the page,
+      // then the body, and the thumbnail credit is listed after the references.
+      var state = { cited: [], uses: {} };
+      var marks = {};
+      if (post.cover && post.cover.cite) marks.cover = V.blog.cite([post.cover.cite], refs, state);
+      var expanded = V.blog.expand(post.body, {
+        refs: refs,
+        state: state,
+        tutorial: M.tutorials.byId.bind(M.tutorials),
+        publication: M.publications.byId.bind(M.publications)
+      });
+      if (post.thumbnail && post.thumbnail.cite) marks.thumbnail = V.blog.cite([post.thumbnail.cite], refs, state);
+
+      var rel = post.related || {};
+      view.innerHTML = V.blog.post(post, {
+        helpers: this.helpers,
+        author: (cfg().site || {}).name || '',
+        references: references,
+        cited: expanded.cited,
+        marks: marks,
+        neighbours: M.blog.neighbours(post),
+        related: {
+          publications: (rel.publications || []).map(M.publications.byId.bind(M.publications)).filter(Boolean),
+          tutorials: (rel.tutorials || []).map(M.tutorials.byId.bind(M.tutorials)).filter(Boolean),
+          links: rel.links || []
+        }
+      });
+
+      var body = view.querySelector('[data-role="body"]');
+      Site.util.markdown(expanded.text).then(function (html) {
+        body.innerHTML = html;
+        C.blog.anchorHeadings(body);
+        Site.util.renderMath(view);
+        // Jump to #section links now that the headings exist.
+        var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target) target.scrollIntoView();
+      });
+    },
+
+    /** Give h2/h3 headings ids and a hover "#" link, so sections can be linked to. */
+    anchorHeadings: function (root) {
+      var seen = {};
+      root.querySelectorAll('h2, h3').forEach(function (h) {
+        var id = h.id || V.slug(h.textContent) || 'section';
+        if (seen[id]) id += '-' + (++seen[id]); else seen[id] = 1;
+        h.id = id;
+        h.insertAdjacentHTML('beforeend', ' <a class="blog-anchor" href="#' + id + '" aria-label="Link to this section">#</a>');
+      });
+    }
+  };
+
 })(window.Site = window.Site || {});

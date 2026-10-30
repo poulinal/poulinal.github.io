@@ -173,10 +173,13 @@
     apply: function (mode) {
       var root = document.documentElement;
       root.setAttribute('data-theme', mode);
-      var light = themeCfg.light || {}, dark = themeCfg.dark || {}, shared = themeCfg.shared || {};
-      Object.keys(light).concat(Object.keys(dark)).forEach(function (k) { root.style.removeProperty(k); });
-      [shared, mode === 'dark' ? dark : light].forEach(function (vars) {
-        Object.keys(vars).forEach(function (k) { if (vars[k] != null) root.style.setProperty(k, vars[k]); });
+      // Site theme first, then the blog's own tokens (config.blog.theme).
+      [themeCfg, (config.blog && config.blog.theme) || {}].forEach(function (t) {
+        var light = t.light || {}, dark = t.dark || {}, shared = t.shared || {};
+        Object.keys(light).concat(Object.keys(dark)).forEach(function (k) { root.style.removeProperty(k); });
+        [shared, mode === 'dark' ? dark : light].forEach(function (vars) {
+          Object.keys(vars).forEach(function (k) { if (vars[k] != null) root.style.setProperty(k, vars[k]); });
+        });
       });
     },
 
@@ -204,7 +207,7 @@
 
   // 1. Theme + fonts right away (this script runs in <head>).
   Site.theme.apply(Site.theme.resolve());
-  if (themeCfg.fontsUrl) Site.util.loadCss(themeCfg.fontsUrl);
+  [].concat(themeCfg.fontsUrl || []).forEach(Site.util.loadCss);
 
   // 2. Page title: "<page title> · <short name>"
   var shortName = config.site && config.site.shortName;
