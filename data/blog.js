@@ -222,10 +222,10 @@ the tutorials on this site are a good place to start.
       date: '2026-11-01',
       category: 'Review',
       summary:
-        'A review breakdown of little red dots (LRDs), JWST\'s recent discovery: ' +
+        'A high-level breakdown of little red dots (LRDs), JWST\'s recent discovery: ' +
         'what LRDs are, what they mean, how we find them, and why they matter' ,
       keywords: ['JWST', 'Little Red Dots', 'LRDs', 'Cosmology', 'SMBH', 'BH'],
-      thumbnail: {
+      cover: {
         src: 'assets/img/blog/lrd_review_blog_2026/littlereddots.jpg',
         alt: 'Recent LRD discoveries in JWST fields.',
         credit: 'NASA, ESA, CSA, STScI, D. Kocevski (Colby College)',
@@ -247,51 +247,117 @@ the tutorials on this site are a good place to start.
           journal: 'ApJ', volume: '995', pages: '21',
           doi: '10.3847/1538-4357/ae145f'
         },
+        {
+          key: 'kocevski2023',
+          authors: ['Kocevski, D.', 'et al.'],
+          year: 2023,
+          title: 'Hidden Little Monsters: Spectroscopic Identification of Low-Mass, Broad-Line AGN at z>5 with CEERS',
+          journal: 'arXiv:2302.00012',
+          doi: '10.48550/arXiv.2302.00012'
+        },
+        {
+          key: 'inayoshi2025',
+          authors: ['Inayoshi, K.', 'Ho, Luis C.'],
+          year: 2025,
+          title: 'A Critical Evaluation of the Physical Nature of the Little Red Dots',
+          journal: 'arXiv:2512.03130', 
+          doi: '10.48550/arXiv.2512.03130'
+        },
+        {
+          key: 'zang2026',
+          authors: ['Zhand, C.', 'Wu, Q.', 'Fan, X.', 'et al.'],
+          year: 2026,
+          title: 'The composite spectrum of little red dots from a standard inner disk and an unstable outer disk',
+          journal: 'Nat Astron', volume: '10', pages: '753-761',
+          doi: '10.1038/s41550-026-02785-x'
+        }
       ],
       body: String.raw`
-fid
+The launch of the James Webb Space Telescope (JWST) has revolutionized our understanding of the high-redshift Universe. Its high photometric sensitivity and spatial resolution in the infrared wavelengths enables astronomers to study some of the youngest and most distant objects. But early observations by JWST spotted an object that didn't fit neatly with existing classification of objects. These sources were deemed *little red dots (LRDs)* which I hope to provide a high-level review on what's currently known about these objects. Their unusual properties raises the important questions: *Are LRDs a previously overlooked population of black holes (BHs) or are they representative of a different physical phenomenon?*
 
-The discovery from JWST:
-The introduction of the James Webb Space Telescope (JWST) has revolutionized our understanding of the high-redshift Universe. It is unparalleled in the capabilities it provides in photometric sensitivity and spatial resolution in the infrared bands to study some of the youngest and most distant objects. This enables detailed observations with photometry and spectroscopy of active galactic nuclei (AGNs). AGNs are … which are powered by accreting massive black holes. Early JWST observations have observed a previously unseen and mysterious population deemed little red dots (LRDs) [Kocevski et al. (2023)]. 
+::: note
+JWST (James Webb Space Telescope) is the largest space-based telescope launched in December of 2021 and began observing in July 2022 with high resolution instruments to observe objects too distant and faint for the Hubble Space Telescope. JWST primarily targets near-infrared astronomy to accomplish this. Due to cosmological expansion, light emitted in the UV and optical range by early galaxies are stretched to infrared wavelengths by the time we observe it at Earth. JWST's main instruments include NIRCam: broad range infrared imager to identify distant sources, NIRSpec: performs spectroscopy over a similar infrared range to investigate emission lines, MIRI: provides mid-to-long-infrared wavelength coverage.
+:::
 
+## The discovery from JWST:
+The powerful capabilities of JWST enables detailed observations with photometry and spectroscopy of AGNs. Studying AGNs enables us to understand the processes that drive the evolution of galaxies and the growth of supermassive black holes. Early JWST observations have observed a previously unseen and mysterious population of what seemed to possess characteristics of AGN and galaxies. These objects were deemed LRDs [@kocevski2023].
 
-An unexpected light spectrum:
-LRDs, as the name suggests, are very compact sources, of size typically less than 100pc. With red optical continua and broad-line emission signatures, i.e. little and red. Since its first observation in 2023, the catalog of LRDs have since exploded, with candidates from many JWST programs. Strikingly, LRDs have a peculiar, V-shape spectral energy distributions (SEDs) with strong red and rest-UV continuums (Tanaka et al. 2025). LRDs have been observed with a peak abundance at z6-8, corresponding to cosmic times of t~0.6-1.0 Gyr, and outnumbers typical active galactic nuclei at z5 (t~1.5 Gyr) which suggests LRD contributes a crucial population for understanding black hole evolution in the high redshift universe (Tanaka et al. 2025). 
-
-
-So what are LRDs:
-Based on LRD’s broad line emission it agrees well with either mass accretion onto BHs or dusty star formation. However, it is unlikely LRD’s can be explained through a dusty star forming source as its mass would be far too large to host other key LRD properties like Balmer absorption and break features. LRDs are still not exactly confirmed as its hard to model spectra from point-like sources. But potential candidates include …, …, and …. The leading model suggests LRD’s are gas-enshrouded AGNs whose gas and dust can produce the reddening needed to produce the red optical spectra and emission features. 
-
-One can interpret the two components of the LRD’s vshape as the following: the blue UV slope corresponds to the unobscured sources (young stellar populations or unobscured AGNs or scatter light leaking through a patchy medium); while the red optical slope corresponds to the dust-reddened obscured sources (from dusty galaxy or obscured AGN). But LRD populations have consistently exhibit extremely similar SED shapes, especiallhyy in the V-shaped valley. This uniformity struggles to be explained with the ultimately variable progenitors above. And the dust obscuration implies dust heating and subsequent thermal re-emission of that energy but JWST and ALMA has not detected any detection of thermal re-emitted flux in LRDs.
-
-What can they hope to tell us:
-Retrieving missing populations from these objects can further understand the formation history of LRDs and black holes, setting limits on the physical processes that fuel the first supermassive black hole formations but which require spectroscopic confirmation. represent an early phase of BH accretion activity, possibly one of the first accretion episodes of newly created BHs.
-
-LRDs are often not isolated but reside in cluster environments which can potentially serve as reservoirs of gas and stars that can fuel the LRDs in its evolutionary phases.
-
-The future
-Current searches for LRDs are pushing both into higher redshift, z≥10 and lower redshifts, z≤3. In both cases there are challenges, At z≥10, to capture the red optical continuum, MIRI photometry is required but MIRI is generally shallower than NIRCam, biasing brighter objects. At z≤3, blue UV and lyman break fall out of JWST, requiring complementary datasets and cautious treatment of contaminant red galaxies. Further analysis of LRDs abundance and clustering wil provide information on the … Additionally, LRDs exhibit variability in its …
+::: definition AGN
+AGN (Active Galactic Nucleus) is a compact region at the center of a galaxy that emits a large amount of energy, typically due to a supermassive black hole (SMBH) accreting matter. This accreting matter falls towards the SMBH, forming an accretion disk. The immense amount of gravitational energy is converted into radiation which is absorbed and re-emitted by the surrounding gas, producing signature emission lines, broadening, and continuum features.
+:::
 
 
-To see more:
-Podcasts: https://www.youtube.com/watch?v=0wmIP6NvkWo&t=178s, https://open.spotify.com/episode/1JZa5bdFvfU4gth7DOAMMn
-Blogz: https://astrobites.org/2024/01/29/little-red-dots-and-big-black-holes/, https://astrobites.org/2026/05/25/lrds-shaq/
+## An unexpected light spectrum:
+LRDs, as the name suggests, are very compact sources, much smaller than the size of a typical galaxy (LRDs are typically less than 100pc). This compactness places strong constraints on the physical properties of LRDs and the source of their luminosity to possible AGN or concentrated stellar population origins. In addition, LRDs show strong emission in the redder optical continuum, contributing to its signature 'little and red' designation [@inayoshi2025]. Since its first observation in 2023, the catalog of LRDs have since exploded, with candidates from many JWST programs. 
+
+::: definition SED
+SED (Spectral Energy Distribution) describes how an object's emitted energy is distributed across different wavelengths. This provides insight into the object's physical properties and energy output through components which make up the SED.
+
+{{figure assets/img/blog/lrd_review_blog_2026/my_sed.png | A CIGALE SED fit for a galaxy, showing how different components (blue, red, green, etc. lines) contribute to the overall SED (in black).}}
+:::
+
+Strikingly, LRDs have a peculiar, V-shape spectral energy distributions (SEDs) with strong rest-frame red and rest-UV continuums [@tanaka2025]. The V-shape spectrum suggests that the observed radiation originates from multiple physical components or regions within the source. For example, the strong rest-UV emission could be caused from young stars, an accretion disk, or radiation escaping through less-obscured regions. The rest-red optical component could arise from heavily obscured dust or gas regions. 
+
+{{ figure assets/img/blog/lrd_review_blog_2026/lrd_vshape_sed.webp | The black solid lines show the observed spectra, the red solid lines indicate the best-fitting absorbed SEDs and the blue dashed lines represent the intrinsic SEDs before absorption. The grey-shaded regions denote the 1σ uncertainty bands derived from the MCMC posterior distributions. The vertical dotted lines mark the Balmer limit at 3,645 Å. Courtesy of Zang et al. (2026) [@zang2026] }}
+::: note dust
+Dust reddening is the process by which dust grains in the interstellar medium absorb and scatter light. This scattering is dependent on wavelength, favoring shorter wavelengths (blue light), letting the longer-wavelengths (red light) through more easily, causing the observed light to be reddened. This effect is particularly important in the study of distant galaxies and other astronomical objects, as it can significantly alter the observed spectral energy distribution.
+:::
 
 
+## So what are LRDs:
+One of LRDs definitive spectrum features is their broad emission lines, that is, emission lines that are wide and not sharply defined. Based on LRD’s broad line emission it agrees well with either AGNs or dusty star formation. AGNs are often attributed with broad line emission whereby the high velocity of the gas (due to the immense gravitational influence of the BH) in an AGN's broad line regions produces doppler broadening [@inayoshi2025]. In contrast, dusty star-forming galaxies provide dense environments to create broaden emission lines through electron scattering. 
+
+{{ figure assets/img/blog/lrd_review_blog_2026/lrd_source_summary.png | Summary of three proposed scenarios for the energy sources of LRDs. (1) Dust-reddened AGNs: broad-line AGNs with moderate dust extinction, explaining their red optical continua. (2) Gas-enshrouded BHs: AGNs embedded in dense gas with a high covering fraction, representing the extreme limit of an AGN + dense gas system. (3) Dusty star formation: systems where the red colors originate primarily from stellar emission attenuated by dust [@inayoshi2025]. Figure courtesy of Inayoshi et al. (2025)[@inayoshi2025] }}
+
+But LRD's Balmer absorption and break features make it difficult to explain the observed properties through a dusty star forming source. The combination of the broad line features and the balmer break is a complex combination and suggests that the observed spectrum involves complex interactions between stars, ionized gas, and an accreting BH rather than from a conventional star population.
+
+::: define Balmer Break
+A Balmer break occurs around 3645 angstroms, caused by a change in hydrogen absorption. At wavelengths shorter than 3646 angstroms, there is enough energy to completely ionize hydrogen atoms that have their electrons in the second energy level. This creates a sudden drop in the spectrum as high-energy photons are consumed by this ionization energy.
+:::
+
+A prominent interpretation of these results suggests LRD’s are young, gas-enshrouded AGNs whose gas and dust can produce the reddening needed to produce the red optical spectra and emission features. In this scenario, the radiation from the accretion disk is absorbed, scattered, and reprocessed by the surrounding material, reproducing the unusual red optical continuum and spectral features while the surrounding gas may broaden emission lines through electron scattering. 
+
+Still, the two components of the LRD’s V-shape are challenging to interpret. A possible interpretation is that the blue UV slope corresponds to the unobscured sources (young stellar populations or unobscured AGNs or scatter light leaking through a patchy medium); while the red optical slope corresponds to the dust-reddened obscured sources (from dusty galaxy or obscured AGN) where the radiation has been heavily reddened or reprocessed. But LRD populations have consistently exhibited extremely similar SED shapes, especially in the V-shaped valley. This uniformity struggles to be explained with the ultimately variable progenitors above. Further difficulting these interpretations is that dust obscuration implies dust heating and subsequent thermal re-emission of that energy but JWST and ALMA has not detected any detection of thermal re-emitted flux in LRDs [@inayoshi2025]. So there is still no consensus on what LRDs are, but a proposed model must not only explain the two strong continuum components but also the relative consistency of the spectral shape across the population.
+
+## What can they hope to tell us:
+If LRDs are indeed young, gas-enshrouded AGNs, then they can provide crucial insights into the early stages of BH growth and the co-evolution of galaxies and their central BHs. A major unresolved problem in cosmology is explaining how SMBH, on the order of billion solar masses, formed within the first few billion years after the Big Band. LRDs could represent an opportunity to observe this rapid growth, near or above the Eddington limit, of BHs in an early, heavily obscured phase of their development. Current samples suggests that LRDs have peak abundance at z=6-8, corresponding to cosmic times of t\~0.6-1.0 Gyr, and outnumbers typical active galactic nuclei at z=5 (t\~1.5 Gyr) which suggests LRD contributes a crucial population for understanding black hole evolution in the high redshift universe [@tanaka2025]. 
+
+::: define Eddington Limit 
+The Eddington limit describes the approximate luminosity at which the outward radiation pressure from an accreting black hole balances the inward gravitational force, a probe for measuring how rapidly a black hole is accreting.
+:::
+
+In addition, the environments in which LRDs are found can also provide important context. LRDs are often not isolated but reside in clustered environments which can potentially serve as reservoirs of gas and stars that can fuel the LRDs in its evolutionary phases. However, it remains unclear whether these environments are typical of LRD populations or whether our sample represents a population that happens to occupy unusually dense regions. Measuring this clustering along with the observed number density of LRDs can help constrain the environments and how long black holes spend during this phase of their evolution.
+
+## The future
+Current searches for LRDs expand the population in both directions of cosmic time, targeting higher redshift (z ≥ 10) and lower redshifts (z ≤ 3). In both cases there are challenges. At z≥10, the spectrum is shifted to longer infrared wavelengths. To capture the red optical continuum, MIRI photometry is required but MIRI is generally shallower than NIRCam. This biases brighter objects, making it difficult to establish the abundance of properties of fainter high-redshift LRDs. At z≤3, blue UV and lyman break fall out of JWST, requiring complementary datasets and cautious treatment of contaminant red galaxies that can mimic some of the characteristic LRD colors [@inayoshi2025]. But these observations could help to establish when LRDs first emerged and how long this phase of evolution of galaxies and BHs are.
+
+Another important search is the study of LRD variability. AGNs are known to exhibit changes in their emitted brightness due to fluctuations in the accretion disk as the rate of infall matter towards the BH changes. Detecting similar variability in LRDs would provide independent evidence for an AGN origin and provide additional information about the size and structure of the emitting regions [@inayoshi2025].
+
+Still, the nature of LRDs remains an open question. Their compactness, unusual V-shape SED spectrums, strong balmer breaks, and broad emission lines suggest they may represent a previously unknown stage of BH growth in the early Universe. No single model has yet explained all of their observed properties, but improved observations and theoretical models may help to clarify their nature. Further research is needed to fully understand the properties and behavior of these enigmatic objects, but it will be sure to enable a new opportunity to investigate the relationship between early galaxies and the SMBH that reside within them.
+
+
+## To see more:
+Podcasts: <br>
+[From First Principles Podcast (JWST’s “Little Red Dots,” TimeVaults, and the Dawn of Math: EP. 23)](https://www.youtube.com/watch?v=0wmIP6NvkWo&t=178s), <br>
+[The Quanta Podcast (The Mystery of the Early Universe's Little Red Dots)](https://open.spotify.com/episode/1JZa5bdFvfU4gth7DOAMMn) <br>
+
+Other Great Blogs: <br>
+[Astrobites (Little Red Dots and Big Black Holes)](https://astrobites.org/2024/01/29/little-red-dots-and-big-black-holes/), <br>
+[Astrobites (Little Red Dots and Shaq’s Huge Feet)](https://astrobites.org/2026/05/25/lrds-shaq/)
 
 `
     },
 
     { //BH* Naidu et al 2026
       id: 'BH*_naidu_2026',
-      title: 'Rapid Growth of Black Holes in the Early Universe',
+      title: 'A Brand New Star: A Possible Explanation for the Rapid Growth of Black Holes in the Early Universe',
       date: '2026-11-01',
       category: 'New paper',
       summary:
         'A breakdown description of a new paper by Naidu et al. 2026 describing the observational discovery ' +
         'of the previously theoretical BH* with JWST: what the authors found, their methodology, and the implications for our understanding of black hole growth in the early universe' ,
       keywords: ['JWST', 'SMBH', 'BH', 'BH*', 'Little Red Dots', 'LRDs'],
-      thumbnail: {
+      cover: {
         src: 'assets/img/blog/bhstar_naidu_et_al_blog_2026/bhstar_feature.avif',
         alt: 'Artistic interpretation of BH* object the size of our solar system.',
         credit: 'Rohan Naidu, University of Hawai\'i',
@@ -341,13 +407,13 @@ Podcasts: https://www.npr.org/2026/08/21/nx-s1-5931541/black-hole-stars-red-dots
 
     { // TNG Simulations Review
       id: 'tng-review',
-      title: 'Large-Scale Simulations from Big-Bang to Present',
+      title: 'TNG: A Breakthrough in Large-Scale Simulations from Big-Bang to Present',
       date: '2026-11-01',
       category: 'Simulations',
       summary:
         'A review of the IllustrisTNG simulations, what they are, how they work, and how to get started.',
       keywords: ['JWST', 'Little Red Dots', 'LRDs', 'Cosmology', 'SMBH', 'BH'],
-      thumbnail: {
+      cover: {
         src: 'assets/img/blog/tngsimulation_review_blog_2026/tng_dm_structure_feature.jpg',
         alt: 'Dark matter structure in the TNG100-1 simulation.',
         credit: 'IllustrisTNG Project',
@@ -417,9 +483,8 @@ $R_{200}$ of their host.
 {{video https://youtu.be/xg25bxdRw-M?si=X411kT6zBMb9dVIK | Simulations of the formation of galaxies in TNG50}}
 
 ## To see more:
-Check out the TNG Page: <br>
-{{link | https://www.tng-project.org | TNG Project Website }}
-Check out my tutorials
+Check out the TNG Page: [IllustrisTNG Project](https://www.tng-project.org) <br>
+Check out my tutorials:
 {{tutorial | Interactive Python tutorials on this site}}
 `
     },
