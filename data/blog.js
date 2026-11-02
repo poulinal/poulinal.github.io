@@ -477,7 +477,7 @@ The CDM model is the standard model of cosmology, describing the evolution of th
 The simulations:
 The core IllustrisTNG project consists of three main simulations: TNG50, TNG100, and TNG300, each with 3 resolution levels, indicated with a numerical suffix: -1,-2, and -3, in order of highest to lowest resolution. In addition, each of the main simulations also include a “dark matter only” run which helps study how the large scale structure and halos evolves under gravity without modeling the efforts of baryonic matter, such as gas cooling or star formation, which is often turbulent [@tng_release_2021].
 
-## Tables, quotes, dividers
+## TNG Simulations
 
 | Run      | Box size   | Purpose        |
 |----------|------------|----------------|
