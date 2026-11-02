@@ -27,8 +27,9 @@
  *               (also used on the card when there is no thumbnail)
  *   body        the post itself, in markdown (see WRITING THE BODY)
  *   references  array of sources you cite with [@key] (see CITATIONS)
- *   related     { publications: ['<pub id>'], tutorials: ['<tutorial id>'],
- *                 links: [{ label, href }] }  -> "Related" box at the end
+ *   related     { blogs: ['<post id>'], publications: ['<pub id>'],
+ *                 tutorials: ['<tutorial id>'], links: [{ label, href }] }
+ *               -> "Related" box at the end
  *   style       per-post look, e.g. { '--blog-text-size': '1.2rem' }.
  *               Any --blog-* variable from config.blog.theme works.
  *   draft       true -> hidden from the list, still viewable at ?p=<id>
@@ -57,6 +58,8 @@
  *         card linking to runcode-template.html?t=kepler
  *     {{pub RNAAS-magnetic-fields-2025}}
  *         card for a paper in data/publications.js
+ *     {{blog lrd_review_2026 | Optional label}}
+ *         card linking to another post (its id), with thumbnail and summary
  *
  *   Callout boxes, for definitions and take-aways:
  *     ::: key Optional title
@@ -217,7 +220,7 @@ the tutorials on this site are a good place to start.
     */
 
     { //LRD Review
-      id: 'lrd_review',
+      id: 'lrd_review_2026',
       title: 'JWST\'s Mysterious Little Red Dots: A Review',
       date: '2026-11-01',
       category: 'Review',
@@ -231,11 +234,7 @@ the tutorials on this site are a good place to start.
         credit: 'NASA, ESA, CSA, STScI, D. Kocevski (Colby College)',
       },
       related: {
-        publications: ['RNAAS-magnetic-fields-2025'],
-        links: [
-          { label: 'IllustrisTNG public data', href: 'https://www.tng-project.org/data/' },
-          // { label: 'Our analysis code on GitHub', href: 'https://github.com/poulinal/TNG_Magnetic_Field_Study' }
-        ]
+        blogs: ['BH*_naidu_2026'],
       },
       references: [
         // { key: 'mcdonough2025', pub: 'RNAAS-magnetic-fields-2025' },
@@ -279,7 +278,7 @@ The launch of the James Webb Space Telescope (JWST) has revolutionized our under
 JWST (James Webb Space Telescope) is the largest space-based telescope launched in December of 2021 and began observing in July 2022 with high resolution instruments to observe objects too distant and faint for the Hubble Space Telescope. JWST primarily targets near-infrared astronomy to accomplish this. Due to cosmological expansion, light emitted in the UV and optical range by early galaxies are stretched to infrared wavelengths by the time we observe it at Earth. JWST's main instruments include NIRCam: broad range infrared imager to identify distant sources, NIRSpec: performs spectroscopy over a similar infrared range to investigate emission lines, MIRI: provides mid-to-long-infrared wavelength coverage.
 :::
 
-## The discovery from JWST:
+## The discovery from JWST
 The powerful capabilities of JWST enables detailed observations with photometry and spectroscopy of AGNs. Studying AGNs enables us to understand the processes that drive the evolution of galaxies and the growth of supermassive black holes. Early JWST observations have observed a previously unseen and mysterious population of what seemed to possess characteristics of AGN and galaxies. These objects were deemed LRDs [@kocevski2023].
 
 ::: definition AGN
@@ -287,7 +286,7 @@ AGN (Active Galactic Nucleus) is a compact region at the center of a galaxy that
 :::
 
 
-## An unexpected light spectrum:
+## An unexpected light spectrum
 LRDs, as the name suggests, are very compact sources, much smaller than the size of a typical galaxy (LRDs are typically less than 100pc). This compactness places strong constraints on the physical properties of LRDs and the source of their luminosity to possible AGN or concentrated stellar population origins. In addition, LRDs show strong emission in the redder optical continuum, contributing to its signature 'little and red' designation [@inayoshi2025]. Since its first observation in 2023, the catalog of LRDs have since exploded, with candidates from many JWST programs. 
 
 ::: definition SED
@@ -298,13 +297,13 @@ SED (Spectral Energy Distribution) describes how an object's emitted energy is d
 
 Strikingly, LRDs have a peculiar, V-shape spectral energy distributions (SEDs) with strong rest-frame red and rest-UV continuums [@tanaka2025]. The V-shape spectrum suggests that the observed radiation originates from multiple physical components or regions within the source. For example, the strong rest-UV emission could be caused from young stars, an accretion disk, or radiation escaping through less-obscured regions. The rest-red optical component could arise from heavily obscured dust or gas regions. 
 
-{{ figure assets/img/blog/lrd_review_blog_2026/lrd_vshape_sed.webp | The black solid lines show the observed spectra, the red solid lines indicate the best-fitting absorbed SEDs and the blue dashed lines represent the intrinsic SEDs before absorption. The grey-shaded regions denote the 1σ uncertainty bands derived from the MCMC posterior distributions. The vertical dotted lines mark the Balmer limit at 3,645 Å. Courtesy of Zang et al. (2026) [@zang2026] }}
+{{ figure assets/img/blog/lrd_review_blog_2026/lrd_vshape_sed.webp | Two Markov Chain Monte Carlo (MCMC) fits of two typical LRD SEDs, showing the characteristic V-shape SED. The black solid lines show the observed spectra, the red solid lines indicate the best-fitting absorbed SEDs and the blue dashed lines represent the intrinsic SEDs before absorption. The grey-shaded regions denote the 1σ uncertainty bands derived from the MCMC posterior distributions. The vertical dotted lines mark the Balmer limit at 3,645 Å [@zang2026]. Courtesy of Zang et al. (2026) [@zang2026] }}
 ::: note dust
 Dust reddening is the process by which dust grains in the interstellar medium absorb and scatter light. This scattering is dependent on wavelength, favoring shorter wavelengths (blue light), letting the longer-wavelengths (red light) through more easily, causing the observed light to be reddened. This effect is particularly important in the study of distant galaxies and other astronomical objects, as it can significantly alter the observed spectral energy distribution.
 :::
 
 
-## So what are LRDs:
+## So what are LRDs?
 One of LRDs definitive spectrum features is their broad emission lines, that is, emission lines that are wide and not sharply defined. Based on LRD’s broad line emission it agrees well with either AGNs or dusty star formation. AGNs are often attributed with broad line emission whereby the high velocity of the gas (due to the immense gravitational influence of the BH) in an AGN's broad line regions produces doppler broadening [@inayoshi2025]. In contrast, dusty star-forming galaxies provide dense environments to create broaden emission lines through electron scattering. 
 
 {{ figure assets/img/blog/lrd_review_blog_2026/lrd_source_summary.png | Summary of three proposed scenarios for the energy sources of LRDs. (1) Dust-reddened AGNs: broad-line AGNs with moderate dust extinction, explaining their red optical continua. (2) Gas-enshrouded BHs: AGNs embedded in dense gas with a high covering fraction, representing the extreme limit of an AGN + dense gas system. (3) Dusty star formation: systems where the red colors originate primarily from stellar emission attenuated by dust [@inayoshi2025]. Figure courtesy of Inayoshi et al. (2025)[@inayoshi2025] }}
@@ -319,7 +318,7 @@ A prominent interpretation of these results suggests LRD’s are young, gas-ensh
 
 Still, the two components of the LRD’s V-shape are challenging to interpret. A possible interpretation is that the blue UV slope corresponds to the unobscured sources (young stellar populations or unobscured AGNs or scatter light leaking through a patchy medium); while the red optical slope corresponds to the dust-reddened obscured sources (from dusty galaxy or obscured AGN) where the radiation has been heavily reddened or reprocessed. But LRD populations have consistently exhibited extremely similar SED shapes, especially in the V-shaped valley. This uniformity struggles to be explained with the ultimately variable progenitors above. Further difficulting these interpretations is that dust obscuration implies dust heating and subsequent thermal re-emission of that energy but JWST and ALMA has not detected any detection of thermal re-emitted flux in LRDs [@inayoshi2025]. So there is still no consensus on what LRDs are, but a proposed model must not only explain the two strong continuum components but also the relative consistency of the spectral shape across the population.
 
-## What can they hope to tell us:
+## What can they hope to tell us?
 If LRDs are indeed young, gas-enshrouded AGNs, then they can provide crucial insights into the early stages of BH growth and the co-evolution of galaxies and their central BHs. A major unresolved problem in cosmology is explaining how SMBH, on the order of billion solar masses, formed within the first few billion years after the Big Band. LRDs could represent an opportunity to observe this rapid growth, near or above the Eddington limit, of BHs in an early, heavily obscured phase of their development. Current samples suggests that LRDs have peak abundance at z=6-8, corresponding to cosmic times of t\~0.6-1.0 Gyr, and outnumbers typical active galactic nuclei at z=5 (t\~1.5 Gyr) which suggests LRD contributes a crucial population for understanding black hole evolution in the high redshift universe [@tanaka2025]. 
 
 ::: define Eddington Limit 
@@ -328,7 +327,7 @@ The Eddington limit describes the approximate luminosity at which the outward ra
 
 In addition, the environments in which LRDs are found can also provide important context. LRDs are often not isolated but reside in clustered environments which can potentially serve as reservoirs of gas and stars that can fuel the LRDs in its evolutionary phases. However, it remains unclear whether these environments are typical of LRD populations or whether our sample represents a population that happens to occupy unusually dense regions. Measuring this clustering along with the observed number density of LRDs can help constrain the environments and how long black holes spend during this phase of their evolution.
 
-## The future
+## What is the future of LRD research?
 Current searches for LRDs expand the population in both directions of cosmic time, targeting higher redshift (z ≥ 10) and lower redshifts (z ≤ 3). In both cases there are challenges. At z≥10, the spectrum is shifted to longer infrared wavelengths. To capture the red optical continuum, MIRI photometry is required but MIRI is generally shallower than NIRCam. This biases brighter objects, making it difficult to establish the abundance of properties of fainter high-redshift LRDs. At z≤3, blue UV and lyman break fall out of JWST, requiring complementary datasets and cautious treatment of contaminant red galaxies that can mimic some of the characteristic LRD colors [@inayoshi2025]. But these observations could help to establish when LRDs first emerged and how long this phase of evolution of galaxies and BHs are.
 
 Another important search is the study of LRD variability. AGNs are known to exhibit changes in their emitted brightness due to fluctuations in the accretion disk as the rate of infall matter towards the BH changes. Detecting similar variability in LRDs would provide independent evidence for an AGN origin and provide additional information about the size and structure of the emitting regions [@inayoshi2025].
@@ -336,12 +335,12 @@ Another important search is the study of LRD variability. AGNs are known to exhi
 Still, the nature of LRDs remains an open question. Their compactness, unusual V-shape SED spectrums, strong balmer breaks, and broad emission lines suggest they may represent a previously unknown stage of BH growth in the early Universe. No single model has yet explained all of their observed properties, but improved observations and theoretical models may help to clarify their nature. Further research is needed to fully understand the properties and behavior of these enigmatic objects, but it will be sure to enable a new opportunity to investigate the relationship between early galaxies and the SMBH that reside within them.
 
 
-## To see more:
+## To see more
 Podcasts: <br>
 [From First Principles Podcast (JWST’s “Little Red Dots,” TimeVaults, and the Dawn of Math: EP. 23)](https://www.youtube.com/watch?v=0wmIP6NvkWo&t=178s), <br>
 [The Quanta Podcast (The Mystery of the Early Universe's Little Red Dots)](https://open.spotify.com/episode/1JZa5bdFvfU4gth7DOAMMn) <br>
 
-Other Great Blogs: <br>
+Other Great Blogs <br>
 [Astrobites (Little Red Dots and Big Black Holes)](https://astrobites.org/2024/01/29/little-red-dots-and-big-black-holes/), <br>
 [Astrobites (Little Red Dots and Shaq’s Huge Feet)](https://astrobites.org/2026/05/25/lrds-shaq/)
 
@@ -350,11 +349,11 @@ Other Great Blogs: <br>
 
     { //BH* Naidu et al 2026
       id: 'BH*_naidu_2026',
-      title: 'A Brand New Star: A Possible Explanation for the Rapid Growth of Black Holes in the Early Universe',
+      title: 'A Brand New (Candidate) Star: A Possible Explanation for the Rapid Growth of Black Holes in the Early Universe',
       date: '2026-11-01',
       category: 'New paper',
       summary:
-        'A breakdown description of a new paper by Naidu et al. 2026 describing the observational discovery ' +
+        'A breakdown description of a new paper by Naidu et al. 2026 describing the observational candidate discovery ' +
         'of the previously theoretical BH* with JWST: what the authors found, their methodology, and the implications for our understanding of black hole growth in the early universe' ,
       keywords: ['JWST', 'SMBH', 'BH', 'BH*', 'Little Red Dots', 'LRDs'],
       cover: {
@@ -364,11 +363,7 @@ Other Great Blogs: <br>
         cite: 'naidu2026'
       },
       related: {
-        publications: ['RNAAS-magnetic-fields-2025'],
-        links: [
-          { label: 'IllustrisTNG public data', href: 'https://www.tng-project.org/data/' },
-          // { label: 'Our analysis code on GitHub', href: 'https://github.com/poulinal/TNG_Magnetic_Field_Study' }
-        ]
+        blogs: ['lrd_review_2026']
       },
       references: [
         // { key: 'mcdonough2025', pub: 'RNAAS-magnetic-fields-2025' },
@@ -382,25 +377,52 @@ Other Great Blogs: <br>
         },
       ],
       body: String.raw`
-Astronomers
+Astronomers remain puzzled at the physical processes that led to the formation and growth of the first supermassive black holes in the early universe. A proposed theoretical object, a black hole star (BH*) may provide insight into these processes. Unlike a conventional star, like our sun, which generates energy through nuclear fusion, a BH* is an actively accreting black hole (BH) that is surrounded by an extremely dense envelope of gas. This envelope can reprocess the radiation from the central BH, creating a system that exhibits some of the properties of a typical star [@naidu2026].
 
-## A brand new (candidate) discovery:
-Astronomers remain puzzled at the physical processes that led to the formation of the first supermassive black holes in the early universe. However, a theoretical object, a black hole star (BH*) may provide insight into these processes. The first BH*, MoM-BH*-1 was observed by Naidu et al. through JWST’s ‘Mirage or Miracle’ (MoM) JWST program. This program focused on …. MoM-BH*-1 stood out as a point-like source that was the reddest source in the Ultra Deep Survey field while being incredible luminous in JWST’s F444W (4.44 micron) filter while exhibiting properties of a F200W (2.00 micron) dropout, effectively disappearing in the shorter wavelengths (contributing to an extreme redness and a large blue contribution dropout. 
+## A brand new (candidate) discovery
+The first BH* candidate, MoM-BH*-1, was identified by Naidu et al. through the James Webb Space Telescope (JWST)’s program, ‘Mirage or Miracle’ (MoM). This program was designed to investigate unusually bright candidate galaxies in the early Universe. The program hoped to determine if these bright candidates were genuine galaxies or something unusual. MoM-BH*-1 stood out as an extremely red, point-like source within the Ultra Deep Survey field. It was incredibly luminous in JWST’s F444W (4.44 micron) filter while exhibiting properties of a F200W (2.00 micron) dropout, effectively disappearing in the shorter wavelengths (contributing to an extreme red appearance and a large blue contribution dropout) [@naidu2026]. This dramatic dropout indicated an unusually strong spectral break, making the source an intriguing target for spectroscopic follow-up.
+
+::: define Balmer Break
+A Balmer break occurs around 3645 angstroms, caused by a change in hydrogen absorption. At wavelengths shorter than 3646 angstroms, there is enough energy to completely ionize hydrogen atoms that have their electrons in the second energy level. This creates a sudden drop in the spectrum as high-energy photons are consumed by this ionization energy.
+:::
+
+{{ figure assets/img/blog/bhstar_naidu_et_al_blog_2026/bhstar_main_fig1.png | JWST imaging and spectroscopy of MoM-BH*-1. a, The 3 × 3″ NIRCam and MIRI images of MoM-BH*-1 spanning 0.9–18 μm. The source is point-like and detected (>3σ) only in the F356W, F444W and F770W bands, apparently disappearing in the bluer bands. b, The NIRSpec prism spectrum (dark blue) shows that the disappearance is due to an enormous Balmer break. Key spectral features such as the Balmer series are marked with dashed lines. c, The 1″ RGB image shows the almost identical slit positions with which the source was observed with prism. Courtesy of Naidu et al. 2026[@naidu2026]. }}
+
+## A formidable Balmer break
+This exceptionally strong balmer break suggested to the authors that MoM-BH*-1 could either be a little red dot (LRD), a quiescent galaxy (QG), or a dust-free stellar population. For the case of a dust-free stellar population, the strongest Balmer breaks are produced by stars with substantial hydrogen in their atmospheres, i.e. a population of purely A-type stars (a very hot near white blue star). However, even in the case of purely A-type stars, the expected break strength is around 5, still weaker than MoM-BH*-1’s break strength of 7.7, significantly exceeding the theoretical stellar limit. The authors make this break strength comparison with LRDs and QG and MoM-BH*-1 still lies well above the expected break strengths of these populations.
+
+{{ figure assets/img/blog/bhstar_naidu_et_al_blog_2026/bhstar_vs_lrd_qg.png | The exceptional Balmer break strength of MoM-BH*-1. a, Contrast of MoM-BH*-1 against a quiescent galaxy and an LRD that lie at a similar redshift (z ≈ 7) and exhibit some of the strongest Balmer breaks reported yet (about 3). The two wavelength windows we use to compute break strengths are highlighted in green—these windows ([3,620–3,720] Å and [4,000–4,100] Å) are free of strong emission lines and are particularly suited for studying high-redshift galaxies. The spectra shown here are normalized in the blue window—flux in this window is detected at >4.5σ for MoM-BH*-1. b, Comparison of break strengths of quiescent galaxies, LRDs with Balmer breaks and stacks of star-forming galaxies at similar redshifts as MoM-BH*-1. The dashed line represents the maximum break strength expected for a dust-free stellar population and a Chabrier initial mass function. MoM-BH*-1 displays the strongest Balmer break at these redshifts and lies well beyond this stellar population maximum. The asymmetric and higher uncertainty on the break strength in MoM-BH*-1 is due to the relatively fainter flux and lower signal-to-noise ratio (about 3) in the blue window. Courtesy of Naidu et al. 2026[@naidu2026]. }}
+
+The spectrum also exhibits unusually intense absorption in the hydrogen Balmer lines, in particular, H and H. This absorption feature requires extreme gas densities such that there is an abundance of hydrogen atoms with populated second energy shells (n=2). The simultaneous presence of strong absorption and emission suggests that the source contains multiple layers of dense gas to contribute to these varying features. 
+
+In addition, MoM-BH*-1 exhibits extremely broad H emission. These spectra feature have been observed in other active galactic nuclei (AGNs) and LRDs but no previously known objects of these classes have displayed a Balmer break as extreme as MoM-BH*-1. Thus, MoM-BH*-1's spectrum challenges the conventional models of these populations.
+
+{{blog lrd_review_2026 | For more information on LRDs, see this blog post...}}
+
+## How could they confirm its a BH*?
+To investigate the physical origin of the spectrum, the team constructed a grid of Cloudy spectral synthesis models. The authors modeled a classical AGN accretion disk embedded in an extremely dense, turbulent, and dust-free gas envelope[@naidu2026]. Tuning the parameters of this model, the authors could generate a modeled spectra to compare against the key features of the observed spectrum. The resulting SED has reproduced the combination of features in MoM-BH*-1. In this interpretation, the object is not a conventional AGN, nor a conventional star, but a BH (with features like line broadening) whose dense gas envelope makes it appear star-like (like the Balmer break and blackbody SED). The model is a promising explanation for the observed spectrum, but testing further candidates will establish whether this represents a distinct population.
+
+::: definition Cloudy
+Cloudy is a software package that simulates how gas absorbs, emits, and scatters radiation under different physical conditions
+:::
 
 
-A formidable balmer break:
-This dropout corresponds to an extreme balmer break where ….  (see figure 2 below). To the authors, this suggested that MoM-BH*-1 could either be a dust-free stellar population. However, for the case of a dust-free stellar population, i.e. a population of purely A-type stars, the strongest break is still magnitude weaker than MoM-BH*-1’s. The intense absorption in the Balmer lines (Hbeta and Hgamma) suggests extreme gas densities such that hydrogen atoms with populated n=2 shells are abundant to …. In addition  in addition to an extremely broad Hbeta emission since …. These feature is typically seen in SMBH and LRDs but could also arise from quiescent galaxy. “However, no known object, AGN or not, displays the singular Balmer break we report in this source”. THis model was compared against an LRD and quiescent galaxy models. To determine the fit, the authors used two balmer break windows to determine the break strength of which MoM-BH*-1 was the absolute monster in balmer break strength, falling far above lrd populations and the stellar population maximum
+## What does this mean for SMBH and LRDs?
+The discovery of MoM-BH*-1 potentially establishes evidence towards how black holes could rapidly form in the early Universe. Theories of SMBH growth predict BH beginning  relatively small, only growing through conventional accretion of material around them. A theoretical solution for rapid growth is that BHs could initially form from much more massive seeds, potentially through the direct collapse of primordial gas clouds. Or BHs could have stages of super-Eddington accretion, allowing them to grow faster than conventional models would predict. The model of MoM-BH*-1 estimates that it is an early, growing BH and its features align with theoretical models of this super-eddington growth.
 
-Determination:
-To fully pin down the origin of the source, the team constructed a grid of Cloudy spectral synthesis models. Cloudy is a ….  to match the data with a classical AGN accretion disk. The authors tuned this model produced a mock spectrum to match key features of the observed spectrum (show figure 3). This BH is seen through a dense, turbulent, envelope of Compton thick gas. The SED has features of SMBH with broad lines but also features associated with stars like the Balmer break, blackbody-like SED, and increasingly deep absorption across the balmer series
+::: definition super-Eddington accretion
+The Eddington limit describes the maximum rate at which a star or black hole can accrete matter without blowing it away with radiation pressure, balancing the radiation pressure with the inward force of gravity. Super-Eddington accretion exceeds this limit, potentially where sufficiently dense gas envelopes can trap radiation, or transport energy through convection, to reduce the radiative feedback that would otherwise push surrounding gas away, allowing matter to continue to fall inward to the BH. 
+:::
 
-Early SMBH:
-Theories of SMBH growth predict channels of seeding massive BHs as well as growing them at a rapid, super-eddington pace where a BH, enshrouded in a dense gas, has high enough opacity to trap the accretion radiation (and convect it away such that gravity may overcome the radiative feedback and exceed the eddington limit. MoM-BH*-1 is an early, growing BH and its features align with theoretical models of this super-eddington growth. Surrounding MoM-BH*-1 is a faint low-mass host dwarf galaxy. This dwarf galaxy is associated with a more massive, bright galaxy only 60 kpc away which agrees with theories that direct collapse BHs that form out of primordial gas needs proximity to an ionizing source to suppress formation of molecular hydrogen to aid in direct collapse (need more BHs in similar configurations to constrain). THe authors overlaid the spectra of the neighboring galaxy with the BH which obtained features found in LRDs suggesting potential origins of LRDs. As such MoM-BH*-1 is effectively the pure templates for the AGN component of LRD’s, untangled from the host galaxy. The host galaxy dominates in the UV while the BH dominates in the rest-optical
+Additionally, MoM-BH*-1 could provide insight into the nature of LRDs. Surrounding MoM-BH*-1 is a faint low-mass host dwarf galaxy. This dwarf galaxy is associated with a more massive, bright galaxy only 60 kpc away which agrees with theories that direct collapse BHs that form out of primordial gas need proximity to an ionizing source to suppress formation of molecular hydrogen to aid in direct collapse. But we need more BHs in similar configurations to constrain these models. By combining the spectra of the neighboring massive galaxy with the BH, the resulting spectrum was able to resemble a typical LRD. The massive galaxy dominates in the UV while the BH dominates in the rest-optical emission. This suggests that MoM-BH*-1 could effectively serve as the pure template for the AGN component of LRD’s, untangled from the host galaxy.
 
+{{ figure assets/img/blog/bhstar_naidu_et_al_blog_2026/bhstar_sed_decomp.png | Explanation of LRDs as gas-enshrouded BHs embedded in comparably bright host galaxies. a,b, MoM-BH*-1 (blue) lies close to a M⋆ ≈ 109.5 M⊙ galaxy at the same redshift (grey). These sources are expected to merge in about 100 Myr, and their superimposed spectrum (offset for clarity; a) and photometry (1″ × 1″ NIRCam stamps; b) is shown in red. The combined spectrum bears a striking resemblance to the typical LRD, displaying a V-shaped SED, an inflection around H∞ = 3,646 Å and a complex Hβ profile with a broad component. The NIRCam stamps demonstrate compactness in the rest-optical and an extended structure in the rest-UV. Although the galaxy is dominant in the rest-UV, the BH outshines it towards the rest-optical. Courtesy of Naidu et al. 2026[@naidu2026]. }}
 
+MoM-BH*-1 is a compelling candidate for a BH*, whose extraordinary spectrum can provide compelling glimpses into the evolution and environments behind rapidly growing SMBHs in the early Universe. Future JWST observations of similar sources will help determine whether these BH*s are truly a unique population or rather a brief phase in BH evolution, but will provide insight into the early history of BHs.
 
-To see more:
-Podcasts: https://www.npr.org/2026/08/21/nx-s1-5931541/black-hole-stars-red-dots-james-webb
+## To see more
+Podcasts: <br>
+    [NPR Podcast Short Wave: Why scientists are stoked about mysterious black hole stars](https://www.npr.org/2026/08/21/nx-s1-5931541/black-hole-stars-red-dots-james-webb)
 
 `
     },

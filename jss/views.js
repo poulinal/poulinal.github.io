@@ -847,10 +847,13 @@
         }).join('') + '</ol></section>';
     },
 
-    /** "Related" box: publications, tutorials and free links. */
+    /** "Related" box: blog posts, publications, tutorials and free links. */
     related: function (rel) {
       if (!rel) return '';
       var items = []
+        .concat((rel.blogs || []).map(function (p) {
+          return '<li><span class="badge">Post</span> <a href="?p=' + encodeURIComponent(p.id) + '">' + esc(p.title) + '</a></li>';
+        }))
         .concat((rel.publications || []).map(function (p) {
           return '<li><span class="badge">Paper</span> <a href="publications.html#' + esc(p.id) + '">' + esc(p.title) + '</a></li>';
         }))
@@ -916,12 +919,24 @@
         '<span class="blog-embed__cta">View publication ' + V.icon('arrow') + '</span></a></div>';
     },
 
+    postCard: function (id, label, post) {
+      if (!post) return '<p class="cite--missing">[unknown blog post “' + esc(id) + '”]</p>';
+      var img = post.thumbnail || post.cover;
+      return '<div class="blog-embed blog-embed--pub"><a class="blog-embed__link" href="?p=' + encodeURIComponent(post.id) + '">' +
+        (img && img.src ? '<img class="blog-embed__thumb" src="' + esc(img.src) + '" alt="" loading="lazy">' : '') +
+        '<span class="blog-embed__kind">Blog post</span>' +
+        '<span class="blog-embed__title">' + esc(label || post.title) + '</span>' +
+        (post.summary ? '<span class="blog-embed__text">' + post.summary + '</span>' : '') +
+        '<span class="blog-embed__cta">Read the post ' + V.icon('arrow') + '</span></a></div>';
+    },
+
     /**
      * Expand blog extras in a markdown body. Returns { text, cited } where
      * `cited` lists reference keys in order of first citation.
      *   ctx.refs        { key: resolved reference }
      *   ctx.tutorial    id -> tutorial or null
      *   ctx.publication id -> publication or null
+     *   ctx.post        id -> blog post or null
      *   ctx.state       optional { cited, uses } shared with other citations on the page
      * Code (~~~ fences, ``` fences, <pre>, <code>) is left untouched.
      */
@@ -941,12 +956,13 @@
           body + '\n\n</aside>';
       });
 
-      // {{figure ...}} {{video ...}} {{tutorial ...}} {{pub ...}} on a line of their own
-      text = text.replace(/^[ \t]*\{\{[ \t]*(figure|video|tutorial|pub)[ \t]+(.*)\}\}[ \t]*$/gm, function (_, kind, rest) {
+      // {{figure ...}} {{video ...}} {{tutorial ...}} {{pub ...}} {{blog ...}} on a line of their own
+      text = text.replace(/^[ \t]*\{\{[ \t]*(figure|video|tutorial|pub|blog)[ \t]+(.*)\}\}[ \t]*$/gm, function (_, kind, rest) {
         var args = rest.split('|').map(function (s) { return s.trim(); });
         var html = kind === 'figure' ? self.figure(++figures, args)
           : kind === 'video' ? self.video(args)
           : kind === 'tutorial' ? self.tutorialCard(args[0], args[1], ctx.tutorial(args[0]))
+          : kind === 'blog' ? self.postCard(args[0], args[1], ctx.post(args[0]))
           : self.pubCard(args[0], ctx.publication(args[0]));
         return '\n\n' + html + '\n\n';
       });

@@ -628,7 +628,8 @@
         refs: refs,
         state: state,
         tutorial: M.tutorials.byId.bind(M.tutorials),
-        publication: M.publications.byId.bind(M.publications)
+        publication: M.publications.byId.bind(M.publications),
+        post: M.blog.byId.bind(M.blog)
       });
       if (post.thumbnail && post.thumbnail.cite) marks.thumbnail = V.blog.cite([post.thumbnail.cite], refs, state);
 
@@ -641,6 +642,7 @@
         marks: marks,
         neighbours: M.blog.neighbours(post),
         related: {
+          blogs: (rel.blogs || []).map(M.blog.byId.bind(M.blog)).filter(Boolean),
           publications: (rel.publications || []).map(M.publications.byId.bind(M.publications)).filter(Boolean),
           tutorials: (rel.tutorials || []).map(M.tutorials.byId.bind(M.tutorials)).filter(Boolean),
           links: rel.links || []
