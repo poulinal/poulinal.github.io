@@ -196,23 +196,297 @@
 //     print(f"T = {T:5d} K   numerical peak = {peak*1e9:6.0f} nm   Wien = {2.898e-3/T*1e9:6.0f} nm")` }
 //       ]
 //     }
-
+    /* ------------------------------------------------------------------ */
     {
       id: 'TNG_Startup',
-      title: 'TNG Startup Guide',
-      summary: 'A guide to getting started with the IllustrisTNG simulations.',
+      title: 'TNG Startup Guide: catalogs from the API',
+      summary: 'How to pull IllustrisTNG group catalogs through the web API, then plot galaxy masses and the star-forming main sequence.',
       level: 'Beginner',
-      duration: '5 min',
+      duration: '15 min',
       packages: ['numpy', 'matplotlib'],
       cells: [
         { type: 'markdown', source: String.raw`
-## Planck's law
+## Getting started with IllustrisTNG
 
-$$B_\lambda(T) = \frac{2hc^2}{\lambda^5}\,\frac{1}{e^{hc/\lambda k_B T} - 1}$$
+The IllustrisTNG simulations are public: anyone can browse and download them through a web
+**API** at [tng-project.org/data](https://www.tng-project.org/data/). In this tutorial you will
+
+1. see how to talk to the API from Python,
+2. learn which **group catalog** fields hold galaxy masses and star formation rates,
+3. turn those raw fields into physical units, and
+4. make two classic plots: the **galaxy mass distribution** and the **star-forming main sequence**.
+
+Loosely based on the STScI TNG workshop notebook by Bryanne McDonough and Olivia Curtis.
+
+::: note Why the API code is not runnable here
+The API needs a personal key (free, from [the registration page](https://www.tng-project.org/users/register/)),
+and this page runs Python inside your browser, which can't reach the TNG servers. So the API steps are
+shown as code to copy into your own Jupyter notebook. For the plots, a hidden cell builds a small
+**mock catalog** with exactly the same field names, shapes and units as the real one, so the
+analysis code below works unchanged on real TNG data.
+:::
 ` },
-        { type: 'code', source: String.raw`import numpy as np
-import matplotlib.pyplot as plt`
-        }
+
+        { type: 'markdown', source: String.raw`
+## 1. Talking to the API
+
+Every request goes to a URL under <code>https://www.tng-project.org/api/</code> and carries your API key
+in a header. The TNG docs suggest a small helper like this one. JSON replies come back as Python
+dictionaries; file downloads (HDF5) are saved to disk and the filename is returned.
+
+~~~python
+import requests
+
+baseUrl = 'https://www.tng-project.org/api/'
+headers = {'api-key': 'YOUR_API_KEY_HERE'}   # from your TNG account page
+
+def get(path, params=None):
+    r = requests.get(path, params=params, headers=headers)
+    r.raise_for_status()                      # stop on HTTP errors (e.g. bad key)
+
+    if r.headers['content-type'] == 'application/json':
+        return r.json()                       # metadata -> dict
+
+    if 'content-disposition' in r.headers:    # a file -> save it
+        filename = r.headers['content-disposition'].split('filename=')[1]
+        with open(filename, 'wb') as f:
+            f.write(r.content)
+        return filename
+    return r
+~~~
+
+### Simulation metadata
+
+Start by listing the simulations and picking one. **TNG100-1** (a box about 110 Mpc across, at the
+highest resolution) is a good default. The suffix <code>-1</code>, <code>-2</code>, <code>-3</code>
+goes from highest to lowest resolution, and <code>-Dark</code> runs are dark matter only.
+
+~~~python
+sims = get(baseUrl)
+print([s['name'] for s in sims['simulations']])
+
+sim = 'TNG100-1'
+simdata = get(baseUrl + sim)
+print(simdata.keys())
+h = simdata['hubble']            # "little h" = H0 / 100 = 0.6774
+print(simdata['num_snapshots'])  # 100 snapshots; snapshot 99 is today (z = 0)
+~~~
+
+### A quick look at a few galaxies
+
+Single objects come back as JSON, and you can sort and filter on the server. For example, the five
+subhalos (galaxies) at $z=0$ with the most stellar mass:
+
+~~~python
+subs = get(baseUrl + sim + '/snapshots/99/subhalos/',
+           {'limit': 5, 'order_by': '-mass_stars'})
+for s in subs['results']:
+    info = get(s['url'])
+    print(s['id'], info['mass_stars'], info['sfr'])
+~~~
+
+This is great for exploring, but far too slow for millions of galaxies. For that, you want a catalog.
+` },
+
+        { type: 'markdown', source: String.raw`
+## 2. Group catalogs
+
+The **group catalogs** list properties of every halo (*Group* fields) and every subhalo / galaxy
+(*Subhalo* fields) in a snapshot. The full list is in the
+[data specifications](https://www.tng-project.org/data/docs/specifications/#sec2). Instead of downloading
+the whole catalog (many GB), you can ask for just the fields you need, and the API returns one HDF5 file:
+
+~~~python
+import h5py
+
+fields = 'SubhaloFlag,SubhaloMassType,SubhaloSFR'
+fname = get(baseUrl + sim + '/files/groupcat-99/', {'Subhalo': fields})
+
+with h5py.File(fname, 'r') as f:
+    flag  = f['Subhalo/SubhaloFlag'][:]
+    mass  = f['Subhalo/SubhaloMassType'][:]   # shape (N_subhalos, 6)
+    sfr   = f['Subhalo/SubhaloSFR'][:]        # M_sun / yr
+~~~
+
+The fields we use:
+
+| Field | Meaning | Units |
+|---|---|---|
+| <code>SubhaloFlag</code> | 1 = cosmological origin, 0 = spurious clump; keep only 1 | — |
+| <code>SubhaloMassType</code> | bound mass split by particle type (6 columns) | $10^{10}\,M_\odot/h$ |
+| <code>SubhaloSFR</code> | instantaneous star formation rate of the gas | $M_\odot\,\mathrm{yr}^{-1}$ |
+
+The six columns of <code>SubhaloMassType</code> are particle types: **0** gas, **1** dark matter, **2** unused,
+**3** tracers, **4** stars (and wind), **5** black holes.
+
+::: tip Supplementary catalogs
+Beyond the group catalogs there are many
+[supplementary catalogs](https://www.tng-project.org/data/docs/specifications/#sec5), for example
+time-averaged star formation rates, which are closer to what observers measure. They download the same way,
+e.g. <code>get(baseUrl + sim + '/files/star_formation_rates.hdf5')</code>. Some are large, so download once and reuse the file.
+:::
+` },
+
+        { type: 'markdown', source: String.raw`
+## 3. Loading the (mock) catalog
+
+The next cell is hidden set-up code. It runs automatically and creates <code>flag</code>, <code>mass</code>,
+<code>sfr</code> and <code>h</code> as if they came from the snippet above: a random subset of 30,000
+subhalos with realistic TNG-like scaling relations. (Click *Show code* if you are curious how.)
+` },
+        { type: 'code', hidden: true, autorun: true, source: String.raw`import numpy as np
+import matplotlib.pyplot as plt
+
+# ---- mock TNG100-1 z=0 subhalo catalog (same fields, shapes and units) ----
+rng = np.random.default_rng(2026)
+h = 0.6774
+N = 30_000
+
+# halo masses: dN/dlogM ~ M^-0.7 between 10^10.3 and 10^14.5 M_sun
+a = -0.7
+u = rng.random(N)
+lo, hi = 10**(a * 10.3), 10**(a * 14.5)
+logMh = np.log10(lo + u * (hi - lo)) / a
+
+# stellar-to-halo mass relation (Moster et al. 2010 shape) + 0.2 dex scatter
+M1, Nn, beta, gamma = 10**11.59, 0.0351, 1.376, 0.608
+Mh = 10**logMh
+Mstar = Mh * 2 * Nn / ((Mh / M1)**-beta + (Mh / M1)**gamma)
+Mstar *= 10**rng.normal(0, 0.2, N)
+Mstar[(logMh < 10.6) & (rng.random(N) < 0.3)] = 0.0   # some dark subhalos have no stars
+logMs = np.log10(np.maximum(Mstar, 1.0))
+
+# star formation: main sequence, plus quenching that rises with mass
+ms = 0.8 * (logMs - 10.0) + rng.normal(0, 0.3, N)
+quenched = rng.random(N) < 1 / (1 + np.exp(-(logMs - 10.5) / 0.25))
+logSFR = np.where(quenched, ms - 2.0 + rng.normal(0, 0.4, N), ms)
+sfr = (10**logSFR).astype(np.float32)
+sfr[quenched & (rng.random(N) < 0.4)] = 0.0          # TNG has many exactly-zero SFRs
+sfr[Mstar == 0] = 0.0
+
+Mgas = np.where(quenched, 0.05, 1.0) * Mstar * 10**rng.normal(0, 0.3, N)
+Mbh = np.where(logMs > 9, 10**(8.2 + 1.1 * (logMs - 11) + rng.normal(0, 0.3, N)), 0.0)
+
+# pack into TNG code units: 10^10 M_sun / h
+mass = np.zeros((N, 6), dtype=np.float32)
+to_code = h / 1e10
+mass[:, 0] = Mgas * to_code
+mass[:, 1] = (Mh - Mstar - Mgas).clip(0) * to_code
+mass[:, 4] = Mstar * to_code
+mass[:, 5] = Mbh * to_code
+flag = (rng.random(N) > 0.02).astype(np.int32)
+
+del a, u, lo, hi, logMh, M1, Nn, beta, gamma, Mh, Mstar, logMs, ms, quenched, logSFR, Mgas, Mbh, to_code
+print(f"Mock catalog ready: {N} subhalos, h = {h}")` },
+
+        { type: 'markdown', source: String.raw`
+Always look at what you got before using it:
+` },
+        { type: 'code', source: String.raw`print("flag:", flag.shape, flag.dtype)
+print("mass:", mass.shape, mass.dtype)
+print("sfr: ", sfr.shape, sfr.dtype)
+mass[:3]   # first three subhalos, all six particle types` },
+
+        { type: 'markdown', source: String.raw`
+## 4. Physical units and cleaning
+
+Masses are stored in units of $10^{10}\,M_\odot/h$, so to get solar masses multiply by $10^{10}$ and divide
+by $h$. Then keep only galaxies that are cosmological in origin (<code>flag == 1</code>) and that are
+reasonably well resolved, say $M_\ast > 10^{8}\,M_\odot$ (a few hundred star particles in TNG100).
+` },
+        { type: 'code', source: String.raw`stellar_mass = mass[:, 4] * 1e10 / h      # M_sun
+dm_mass      = mass[:, 1] * 1e10 / h
+subID        = np.arange(len(stellar_mass)) # a subhalo's ID is its row index
+
+good = (flag == 1) & (stellar_mass > 1e8)
+
+ids  = subID[good]
+Ms   = stellar_mass[good]
+Mdm  = dm_mass[good]
+SFR  = sfr[good]
+
+print(f"Before cuts: {len(stellar_mass):6d} subhalos")
+print(f"After cuts:  {len(Ms):6d} galaxies")` },
+
+        { type: 'markdown', source: String.raw`
+## 5. Plot 1: how are galaxy masses distributed?
+
+Galaxy masses span many orders of magnitude, so we histogram $\log_{10} M$. Plotting stars and
+dark matter together shows how small a galaxy's stellar component is compared to its halo.
+` },
+        { type: 'code', source: String.raw`bins = np.arange(8, 14.6, 0.2)
+
+plt.figure(figsize=(6.5, 4))
+plt.hist(np.log10(Ms),  bins=bins, histtype="step", lw=2, color="#2a6fdb", label="stars")
+plt.hist(np.log10(Mdm), bins=bins, histtype="step", lw=2, color="#7a7a7a", label="dark matter")
+plt.yscale("log")
+plt.xlabel(r"$\log_{10}\,M\ [M_\odot]$")
+plt.ylabel("number of galaxies per 0.2 dex")
+plt.title("Mass distribution of galaxies (TNG-like, z = 0)")
+plt.legend(frameon=False);` },
+
+        { type: 'markdown', source: String.raw`
+Two things to notice: low-mass galaxies vastly outnumber massive ones, and the dark matter curve sits
+roughly 1.5–2 dex (a factor of 30–100) to the right. Dividing the counts by the bin width and the box volume
+turns this histogram into the **stellar mass function**, one of the key observables TNG was tuned to reproduce.
+
+## 6. Plot 2: the star-forming main sequence
+
+Star-forming galaxies follow a tight relation between SFR and stellar mass, the **main sequence**.
+Galaxies far below it are **quenched**. A common dividing line is the *specific* SFR,
+$\mathrm{sSFR} = \mathrm{SFR}/M_\ast$, at $10^{-11}\,\mathrm{yr}^{-1}$.
+
+TNG gives many galaxies an SFR of exactly zero (no gas dense enough to form stars), which would vanish on a log
+axis. A common trick is to place them at a floor value so they stay visible.
+` },
+        { type: 'code', source: String.raw`ssfr = SFR / Ms
+is_sf = ssfr > 1e-11
+floor = -3.5                                   # where to draw SFR = 0 galaxies
+logSFR = np.log10(np.where(SFR > 0, SFR, 10**floor))
+logMs = np.log10(Ms)
+
+fig, ax = plt.subplots(figsize=(6.5, 4.5))
+ax.scatter(logMs[~is_sf], logSFR[~is_sf], s=4, alpha=0.35, color="#d1495b", label="quenched", rasterized=True)
+ax.scatter(logMs[is_sf],  logSFR[is_sf],  s=4, alpha=0.35, color="#2a6fdb", label="star-forming", rasterized=True)
+
+m = np.linspace(8, 12, 50)                     # the sSFR = 1e-11 / yr line
+ax.plot(m, m - 11, "k--", lw=1)
+ax.text(8.1, -3.15, "sSFR = $10^{-11}$/yr", fontsize=9)
+
+ax.set_xlim(8, 12.2); ax.set_ylim(floor - 0.3, 2.5)
+ax.set_xlabel(r"$\log_{10}\,M_\ast\ [M_\odot]$")
+ax.set_ylabel(r"$\log_{10}\,\mathrm{SFR}\ [M_\odot\,\mathrm{yr}^{-1}]$")
+ax.set_title("Star-forming main sequence")
+ax.legend(frameon=False, markerscale=4, loc="upper left")
+
+print(f"quenched fraction: {np.mean(~is_sf):.1%}")
+print(f"galaxies with SFR = 0 (on the floor): {np.sum(SFR == 0)}");` },
+
+        { type: 'markdown', source: String.raw`
+The quenched population grows with mass: in TNG, galaxies above about $10^{10.5}\,M_\odot$ are shut down
+mainly by energy from their central supermassive black hole.
+
+### Exercises
+
+1. Compute the quenched fraction in bins of stellar mass and plot it against $\log_{10} M_\ast$.
+   (Hint: <code>np.digitize</code> or a loop over <code>bins</code>.)
+2. Plot the **stellar-to-halo mass ratio** $M_\ast / M_\mathrm{DM}$ against $M_\mathrm{DM}$. At what halo mass are galaxies most
+   efficient at forming stars?
+3. Column 5 of <code>mass</code> is black hole mass. How does it scale with stellar mass?
+` },
+        { type: 'code', source: String.raw`# your code here
+` },
+
+        { type: 'markdown', source: String.raw`
+## Where to go next
+
+On your own machine, swap the mock cell for the real API download and everything above runs as is.
+From there, the API also offers
+
+- **merger trees**: <code>get(baseUrl + sim + '/snapshots/99/subhalos/ID/sublink/mpb.hdf5')</code> follows one galaxy back in time,
+- **cutouts**: <code>get(baseUrl + sim + '/snapshots/99/subhalos/ID/cutout.hdf5', {'stars': 'Coordinates,Masses'})</code> gives the individual particles of one galaxy,
+- the [TNG API cookbook](https://www.tng-project.org/data/docs/api/) with many more worked examples.
+` }
       ]
     }
 

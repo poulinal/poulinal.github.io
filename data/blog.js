@@ -465,17 +465,17 @@ Magnetohydrodynamics (MHD) describes the behavior of electrically conducting flu
 :::
 
 ## A model of the universe
-The IllustrisTNG project is a large-scale cosmological magnetohydrodynamical simulation of galaxy gormation. It is built on the $\Lambda$CDM cosmological framework. It models the evolution of dark matter and ordinary matter, including the effects of gravity, gas dynamics, magnetic fields, star formation, and feedback from supernovae and supermassive black holes. The simulations start shortly after the Big Bang and model the evolution of dark matter, cosmic filaments, and the formation and evolution of galaxies and stars forward to the present day [@tng_release_2021].
+The IllustrisTNG project is a large-scale cosmological magnetohydrodynamical simulation of galaxy formation. It is built on the CDM cosmological framework. It models the evolution of dark matter and ordinary matter, including the effects of gravity, gas dynamics, magnetic fields, star formation, and feedback from supernovae and supermassive black holes. The simulations start shortly after the Big Bang and model the evolution of dark matter, cosmic filaments, and the formation and evolution of galaxies and stars forward to the present day [@tng_release_2021].
 
 The IllustrisTNG project is the successor to the original Illustris simulations. It includes improvements in the numerical model and its treatment of physical processes to better reproduce the observed galaxy populations and its properties such as color bimodality.
 
-::: definition $\Lambda$CDM
-The $\Lambda$CDM model is the standard model of cosmology, describing the evolution of the universe from the Big Bang to the present day. It includes a cosmological constant ($\Lambda$) representing dark energy, and cold dark matter (CDM) as the dominant form of matter in the universe. Cold dark matter is a form of matter that does not interact with electromagnetic radiation, making it invisible to direct observation. This model successfully explains a wide range of observations, including the cosmic microwave background, large-scale structure, and the accelerating expansion of the universe.
+::: definition CDM
+The CDM model is the standard model of cosmology, describing the evolution of the universe from the Big Bang to the present day. It includes a cosmological constant () representing dark energy, and cold dark matter (CDM) as the dominant form of matter in the universe. Cold dark matter is a form of matter that does not interact with electromagnetic radiation, making it invisible to direct observation. This model successfully explains a wide range of observations, including the cosmic microwave background, large-scale structure, and the accelerating expansion of the universe.
 :::
 
 
 The simulations:
-The core IllustrisTNG project consists of three main simulations: TNG50, TNG100, and TNG300, each with 3 resolution levels, indicated with a numerical sufffix: -1,-2, and -3, in order of highest to lowest resolution. In addition, each of the main simulations also include a “dark matter only” run which helps study how the large scale structure and halos evolves under gravity without modeling the efforts of baryonic matter, such as gas cooling or star formation, which is often turbulent [@tng_release_2021].
+The core IllustrisTNG project consists of three main simulations: TNG50, TNG100, and TNG300, each with 3 resolution levels, indicated with a numerical suffix: -1,-2, and -3, in order of highest to lowest resolution. In addition, each of the main simulations also include a “dark matter only” run which helps study how the large scale structure and halos evolves under gravity without modeling the efforts of baryonic matter, such as gas cooling or star formation, which is often turbulent [@tng_release_2021].
 
 ## Tables, quotes, dividers
 
@@ -485,26 +485,24 @@ The core IllustrisTNG project consists of three main simulations: TNG50, TNG100,
 | TNG100   | ~100 Mpc   | balance        |
 | TNG300   | ~300 Mpc   | statistics     |
 
-TNG50 models the smalest volume at the highest resolution, enabling detailed studies of the internal structure of galaxies and stellar populations. TNG100 balances volume and resolution, while TNG300 models the largest volume, enabling studies of large-scale structure and rare objects. 
+TNG50 models the smallest volume at the highest resolution, enabling detailed studies of the internal structure of galaxies and stellar populations. TNG100 balances volume and resolution, while TNG300 models the largest volume, enabling studies of large-scale structure and rare objects. 
 
 
-The project has since expanded with the addition of TNG-Cluster. TNG-Cluster provides 352 high-resolution zoom-in galaxy clusters. Zoom-in simulations concetrate computational resources around selected objects to balance the need for high resolution with the need for large volume, needed for studying massive rare objects. As such, TNG-Cluster is able to significantly enhance the sample statistics of the highest cluster mass regime, enabling insight into the most massive and rare objects in the universe. Other projects have extended TNG framework into new regimes and applications, including CAMELS, which investigates the effects of varying cosmological and astrophysical parameters, and TNG-Millenium, which explores the connection between the TNG galaxy gromation model and large-scale structure in the universe.
+The project has since expanded with the addition of TNG-Cluster. TNG-Cluster provides 352 high-resolution zoom-in galaxy clusters. Zoom-in simulations concentrate computational resources around selected objects to balance the need for high resolution with the need for large volume, needed for studying massive rare objects. As such, TNG-Cluster is able to significantly enhance the sample statistics of the highest cluster mass regime, enabling insight into the most massive and rare objects in the universe. Other projects have extended TNG framework into new regimes and applications, including CAMELS, which investigates the effects of varying cosmological and astrophysical parameters, and TNG-Millenium, which explores the connection between the TNG galaxy formation model and large-scale structure in the universe.
 
 
 Key Findings thus far:
-Since their release, the IllustrisTNG simulations have contributed to a wide range of studies investigating galaxy formation and evolution, and the large-scale structure of the universe. One of the earliest successes of the IllustrisTNG simulations was its ability to reproduce the observed galaxy color bimodality, a key feature of the galaxy population. IllustrisTNG simulations have also aided in udnerstanding the relationship between a dark matter halo and the galaxies that form within it, as well as the role of feedback from supermassive black holes in regulating star formation and shaping galaxy properties.
+Since their release, the IllustrisTNG simulations have contributed to a wide range of studies investigating galaxy formation and evolution, and the large-scale structure of the universe. One of the earliest successes of the IllustrisTNG simulations was its ability to reproduce the observed galaxy color bimodality, a key feature of the galaxy population. IllustrisTNG simulations have also aided in understanding the relationship between a dark matter halo and the galaxies that form within it, as well as the role of feedback from supermassive black holes in regulating star formation and shaping galaxy properties.
 
 {{video https://www.youtube.com/watch?v=O674AZ_UKZk | Formation of a single massive galaxy through time in the TNG50 cosmic simulations}}
 
 
 Data access:
-One of the most valuable aspects of IllustrisTNG is that its simulation data are publicly available. Researchers can access snapshots, particle and gas-cell properties, halo and subhalo catalogs, and merger trees through the official IllustrisTNG website. The data can be downloaded directly for local analysis or accessed through a web-based API, allowing users to retrieve specific galaxies and physical quantities without downloading entire simulation volumes.
+One of the most valuable aspects of IllustrisTNG is that its simulation data are publicly available. Anybody can access snapshots, particle and gas-cell properties, halo and subhalo catalogs, and merger trees through the official IllustrisTNG website. The data can be downloaded directly for local analysis or accessed through a web-based API, allowing users to retrieve specific galaxies and physical quantities without downloading entire simulation volumes. For those getting started, the project provides extensive documentation, example scripts, and tutorials for navigating the data.
 
-For those getting started, the project provides extensive documentation, example scripts, and tutorials for navigating the data. Python is particularly useful for analyzing the simulations, with the official API and helper libraries providing tools to retrieve and process different particle types, identify galaxies, and follow their evolution across cosmic time. This accessibility allows researchers and students to investigate a wide range of questions using the same underlying simulation data.
+{{tutorial TNG_Startup | For those interested in getting started with TNG, consider taking some time interacting with my in-browser tutorials on this page}}
 
-{{tutorial TNG_Startup | For those interested in getting started with TNG, consider taking some time interacting with my in-browser tutorials on this page}}.
-
-IllustrisTNG simulations provide a powerful tool for studying how galaxy and the large-scale structure of the universe form and evolved. By combining a wide range of physical processes with high-resolution simulations, the project has enabled studies of magnetic fields, feedback processes, and the host-halo relationship, among many other topics. The public availability of the data and the accompanying documentation and tutorials make it accessible to a wide range of researchers, enabling new discoveries and insights into the universe's evolution.
+IllustrisTNG simulations provide a powerful tool for studying how galaxies and the large-scale structure of the universe form and evolve. By combining a wide range of physical processes with high-resolution simulations, the project has enabled studies of magnetic fields, feedback processes, and the host-halo relationship, among many other topics. The public availability of the data and the accompanying documentation and tutorials make it accessible to a wide range of researchers, enabling new discoveries and insights into the universe's evolution.
 
 
 ## To see more:
@@ -516,6 +514,8 @@ Check out this video on more galaxy formation in TNG50: <br>
 
 Check out my tutorials: <br>
 {{tutorial | Interactive Python tutorials on this site}}
+
+
 `
     },
 
