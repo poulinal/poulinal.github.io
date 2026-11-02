@@ -272,7 +272,7 @@ the tutorials on this site are a good place to start.
         }
       ],
       body: String.raw`
-The launch of the James Webb Space Telescope (JWST) has revolutionized our understanding of the high-redshift Universe. Its high photometric sensitivity and spatial resolution in the infrared wavelengths enables astronomers to study some of the youngest and most distant objects. But early observations by JWST spotted an object that didn't fit neatly with existing classification of objects. These sources were deemed *little red dots (LRDs)* which I hope to provide a high-level review on what's currently known about these objects. Their unusual properties raises the important questions: *Are LRDs a previously overlooked population of black holes (BHs) or are they representative of a different physical phenomenon?*
+The launch of the James Webb Space Telescope (JWST) has revolutionized our understanding of the high-redshift universe. Its high photometric sensitivity and spatial resolution in the infrared wavelengths enables astronomers to study some of the youngest and most distant objects. But early observations by JWST spotted an object that didn't fit neatly with existing classification of objects. These sources were deemed *little red dots (LRDs)* which I hope to provide a high-level review on what's currently known about these objects. Their unusual properties raises the important questions: *Are LRDs a previously overlooked population of black holes (BHs) or are they representative of a different physical phenomenon?*
 
 ::: note
 JWST (James Webb Space Telescope) is the largest space-based telescope launched in December of 2021 and began observing in July 2022 with high resolution instruments to observe objects too distant and faint for the Hubble Space Telescope. JWST primarily targets near-infrared astronomy to accomplish this. Due to cosmological expansion, light emitted in the UV and optical range by early galaxies are stretched to infrared wavelengths by the time we observe it at Earth. JWST's main instruments include NIRCam: broad range infrared imager to identify distant sources, NIRSpec: performs spectroscopy over a similar infrared range to investigate emission lines, MIRI: provides mid-to-long-infrared wavelength coverage.
@@ -332,13 +332,13 @@ Current searches for LRDs expand the population in both directions of cosmic tim
 
 Another important search is the study of LRD variability. AGNs are known to exhibit changes in their emitted brightness due to fluctuations in the accretion disk as the rate of infall matter towards the BH changes. Detecting similar variability in LRDs would provide independent evidence for an AGN origin and provide additional information about the size and structure of the emitting regions [@inayoshi2025].
 
-Still, the nature of LRDs remains an open question. Their compactness, unusual V-shape SED spectrums, strong balmer breaks, and broad emission lines suggest they may represent a previously unknown stage of BH growth in the early Universe. No single model has yet explained all of their observed properties, but improved observations and theoretical models may help to clarify their nature. Further research is needed to fully understand the properties and behavior of these enigmatic objects, but it will be sure to enable a new opportunity to investigate the relationship between early galaxies and the SMBH that reside within them.
+Still, the nature of LRDs remains an open question. Their compactness, unusual V-shape SED spectrums, strong balmer breaks, and broad emission lines suggest they may represent a previously unknown stage of BH growth in the early universe. No single model has yet explained all of their observed properties, but improved observations and theoretical models may help to clarify their nature. Further research is needed to fully understand the properties and behavior of these enigmatic objects, but it will be sure to enable a new opportunity to investigate the relationship between early galaxies and the SMBH that reside within them.
 
 
 ## To see more
 Podcasts: <br>
 [From First Principles Podcast (JWST’s “Little Red Dots,” TimeVaults, and the Dawn of Math: EP. 23)](https://www.youtube.com/watch?v=0wmIP6NvkWo&t=178s), <br>
-[The Quanta Podcast (The Mystery of the Early Universe's Little Red Dots)](https://open.spotify.com/episode/1JZa5bdFvfU4gth7DOAMMn) <br>
+[The Quanta Podcast (The Mystery of the Early universe's Little Red Dots)](https://open.spotify.com/episode/1JZa5bdFvfU4gth7DOAMMn) <br>
 
 Other Great Blogs <br>
 [Astrobites (Little Red Dots and Big Black Holes)](https://astrobites.org/2024/01/29/little-red-dots-and-big-black-holes/), <br>
@@ -349,7 +349,7 @@ Other Great Blogs <br>
 
     { //BH* Naidu et al 2026
       id: 'BH*_naidu_2026',
-      title: 'A Brand New (Candidate) Star: A Possible Explanation for the Rapid Growth of Black Holes in the Early Universe',
+      title: 'A Brand New (Candidate) Star: A Possible Explanation for the Rapid Growth of Black Holes in the Early universe',
       date: '2026-11-01',
       category: 'New paper',
       summary:
@@ -380,7 +380,7 @@ Other Great Blogs <br>
 Astronomers remain puzzled at the physical processes that led to the formation and growth of the first supermassive black holes in the early universe. A proposed theoretical object, a black hole star (BH*) may provide insight into these processes. Unlike a conventional star, like our sun, which generates energy through nuclear fusion, a BH* is an actively accreting black hole (BH) that is surrounded by an extremely dense envelope of gas. This envelope can reprocess the radiation from the central BH, creating a system that exhibits some of the properties of a typical star [@naidu2026].
 
 ## A brand new (candidate) discovery
-The first BH* candidate, MoM-BH*-1, was identified by Naidu et al. through the James Webb Space Telescope (JWST)’s program, ‘Mirage or Miracle’ (MoM). This program was designed to investigate unusually bright candidate galaxies in the early Universe. The program hoped to determine if these bright candidates were genuine galaxies or something unusual. MoM-BH*-1 stood out as an extremely red, point-like source within the Ultra Deep Survey field. It was incredibly luminous in JWST’s F444W (4.44 micron) filter while exhibiting properties of a F200W (2.00 micron) dropout, effectively disappearing in the shorter wavelengths (contributing to an extreme red appearance and a large blue contribution dropout) [@naidu2026]. This dramatic dropout indicated an unusually strong spectral break, making the source an intriguing target for spectroscopic follow-up.
+The first BH* candidate, MoM-BH*-1, was identified by Naidu et al. through the James Webb Space Telescope (JWST)’s program, ‘Mirage or Miracle’ (MoM). This program was designed to investigate unusually bright candidate galaxies in the early universe. The program hoped to determine if these bright candidates were genuine galaxies or something unusual. MoM-BH*-1 stood out as an extremely red, point-like source within the Ultra Deep Survey field. It was incredibly luminous in JWST’s F444W (4.44 micron) filter while exhibiting properties of a F200W (2.00 micron) dropout, effectively disappearing in the shorter wavelengths (contributing to an extreme red appearance and a large blue contribution dropout) [@naidu2026]. This dramatic dropout indicated an unusually strong spectral break, making the source an intriguing target for spectroscopic follow-up.
 
 ::: define Balmer Break
 A Balmer break occurs around 3645 angstroms, caused by a change in hydrogen absorption. At wavelengths shorter than 3646 angstroms, there is enough energy to completely ionize hydrogen atoms that have their electrons in the second energy level. This creates a sudden drop in the spectrum as high-energy photons are consumed by this ionization energy.
@@ -408,7 +408,7 @@ Cloudy is a software package that simulates how gas absorbs, emits, and scatters
 
 
 ## What does this mean for SMBH and LRDs?
-The discovery of MoM-BH*-1 potentially establishes evidence towards how black holes could rapidly form in the early Universe. Theories of SMBH growth predict BH beginning  relatively small, only growing through conventional accretion of material around them. A theoretical solution for rapid growth is that BHs could initially form from much more massive seeds, potentially through the direct collapse of primordial gas clouds. Or BHs could have stages of super-Eddington accretion, allowing them to grow faster than conventional models would predict. The model of MoM-BH*-1 estimates that it is an early, growing BH and its features align with theoretical models of this super-eddington growth.
+The discovery of MoM-BH*-1 potentially establishes evidence towards how black holes could rapidly form in the early universe. Theories of SMBH growth predict BH beginning  relatively small, only growing through conventional accretion of material around them. A theoretical solution for rapid growth is that BHs could initially form from much more massive seeds, potentially through the direct collapse of primordial gas clouds. Or BHs could have stages of super-Eddington accretion, allowing them to grow faster than conventional models would predict. The model of MoM-BH*-1 estimates that it is an early, growing BH and its features align with theoretical models of this super-eddington growth.
 
 ::: definition super-Eddington accretion
 The Eddington limit describes the maximum rate at which a star or black hole can accrete matter without blowing it away with radiation pressure, balancing the radiation pressure with the inward force of gravity. Super-Eddington accretion exceeds this limit, potentially where sufficiently dense gas envelopes can trap radiation, or transport energy through convection, to reduce the radiative feedback that would otherwise push surrounding gas away, allowing matter to continue to fall inward to the BH. 
@@ -418,7 +418,7 @@ Additionally, MoM-BH*-1 could provide insight into the nature of LRDs. Surroundi
 
 {{ figure assets/img/blog/bhstar_naidu_et_al_blog_2026/bhstar_sed_decomp.png | Explanation of LRDs as gas-enshrouded BHs embedded in comparably bright host galaxies. a,b, MoM-BH*-1 (blue) lies close to a M⋆ ≈ 109.5 M⊙ galaxy at the same redshift (grey). These sources are expected to merge in about 100 Myr, and their superimposed spectrum (offset for clarity; a) and photometry (1″ × 1″ NIRCam stamps; b) is shown in red. The combined spectrum bears a striking resemblance to the typical LRD, displaying a V-shaped SED, an inflection around H∞ = 3,646 Å and a complex Hβ profile with a broad component. The NIRCam stamps demonstrate compactness in the rest-optical and an extended structure in the rest-UV. Although the galaxy is dominant in the rest-UV, the BH outshines it towards the rest-optical. Courtesy of Naidu et al. 2026[@naidu2026]. }}
 
-MoM-BH*-1 is a compelling candidate for a BH*, whose extraordinary spectrum can provide compelling glimpses into the evolution and environments behind rapidly growing SMBHs in the early Universe. Future JWST observations of similar sources will help determine whether these BH*s are truly a unique population or rather a brief phase in BH evolution, but will provide insight into the early history of BHs.
+MoM-BH*-1 is a compelling candidate for a BH*, whose extraordinary spectrum can provide compelling glimpses into the evolution and environments behind rapidly growing SMBHs in the early universe. Future JWST observations of similar sources will help determine whether these BH*s are truly a unique population or rather a brief phase in BH evolution, but will provide insight into the early history of BHs.
 
 ## To see more
 Podcasts: <br>
@@ -458,39 +458,24 @@ Podcasts: <br>
         },
       ],
       body: String.raw`
-Magnetic fields thread through every galaxy we know of,
+Observing the universe is difficult, and even with the most powerful telescopes, we are limited by what we can see. Limited telescope sensitivity, observational uncertainties, and rarity of objects can limit our understanding of the universe. Cosmological simulations provide a complementary approach to observations, allowing us to test theoretical models and make predictions about the universe's evolution. 
+
+::: definition Magnetohydrodynamics (MHD)
+Magnetohydrodynamics (MHD) describes the behavior of electrically conducting fluids, such as ionized gases which are commonly found throughout galaxies. MHD adds the fact that unlike classical neutral gases,hot, ionized gas conducts electricity, so it affects the  magnetic field lines along with it. Increasing the density of the gas, increases the density of the magnetic field lines, which makes the field stronger.
+:::
 
 ## A model of the universe
-Observations are hard! From factors like limited data, limited observables, and rare objects, the frontier is constantly pushing on the limitations of current telescopes. Simulations provide a gateway to test theoretical predictions that may not be feasible with current or as a precursor to observations. Fro example, dark matter and dark energy are remain difficult to observe but through TNG, simulations of models of dark matter and dark energy can test how accurate the simulations are to our observations. By testing the simulation, better constraints can be placed on the models which will better predict how visible and dark matter evolve in the universe. Introducing the IllustrisTNG project, it is an ongoing series of large, cosmological magnetohydrodynamical simulations of galaxy formation. It hopes to study the physical processes that drive galaxy formation. It is built on the lambda CDM, cold dark matter theory, through magnetohydrodynamical which is …. It is the successor to the original Illustris simulations built in …. It improves on the original Illustris simulations that failed to agree with observational color bimodality. The simulations start shortly after the Big Bang and model the evolution of dark matter, cosmic filaments, and the formation and evolution of galaxies and stars forward to the present day. 
+The IllustrisTNG project is a large-scale cosmological magnetohydrodynamical simulation of galaxy gormation. It is built on the $\Lambda$CDM cosmological framework. It models the evolution of dark matter and ordinary matter, including the effects of gravity, gas dynamics, magnetic fields, star formation, and feedback from supernovae and supermassive black holes. The simulations start shortly after the Big Bang and model the evolution of dark matter, cosmic filaments, and the formation and evolution of galaxies and stars forward to the present day [@tng_release_2021].
 
+The IllustrisTNG project is the successor to the original Illustris simulations. It includes improvements in the numerical model and its treatment of physical processes to better reproduce the observed galaxy populations and its properties such as color bimodality.
 
+::: definition $\Lambda$CDM
+The $\Lambda$CDM model is the standard model of cosmology, describing the evolution of the universe from the Big Bang to the present day. It includes a cosmological constant ($\Lambda$) representing dark energy, and cold dark matter (CDM) as the dominant form of matter in the universe. Cold dark matter is a form of matter that does not interact with electromagnetic radiation, making it invisible to direct observation. This model successfully explains a wide range of observations, including the cosmic microwave background, large-scale structure, and the accelerating expansion of the universe.
+:::
 
 
 The simulations:
-The core IllustrisTNG project consists of three main simulations: TNG50, TNG100, and TNG300, each with 3 resolution levels, indicated with a ‘-n’ where n=1,2,3 in order of highest to lowest resolution. In addition, each of the main simulations also include a “dark matter only” run which helps study how the large scale structure and halos evolves with a clean model that isn’t turbulent with how baryons interact.
-Recently, the project has been expanded with the addition of TNG-Cluster. TNG-Cluster provides 352 zoom-in clusters, to significantly enhance the sample statistics of the highest cluster mass regime, enabling insight into the most massive and rare objects in the universe
-There are several spin-off projects, utilizing the TNG galaxy formation model to apply to new regimes and applications like TNG-Millenium, CAMELS, and AIDA-TNG.
-
-
-Key Findings thus far:
-
-Data access:
-The simulations are completely open-access. To begin getting your hands on the simulations, you can visit the m
-
-See *point to tutorial* for more information on handling TNG
-
-
-::: definition Magnetohydrodynamics (MHD)
-Ordinary fluid dynamics describes how gas flows. MHD adds the fact that hot, ionized gas conducts
-electricity, so it drags magnetic field lines along with it. Squeeze the gas and you squeeze the field
-lines closer together, which makes the field stronger.
-:::
-
-::: key
-At the same stellar mass, satellite galaxies have magnetic fields roughly **an order of magnitude
-stronger** than central galaxies. The gap is largest for satellites that have already passed within
-$R_{200}$ of their host.
-:::
+The core IllustrisTNG project consists of three main simulations: TNG50, TNG100, and TNG300, each with 3 resolution levels, indicated with a numerical sufffix: -1,-2, and -3, in order of highest to lowest resolution. In addition, each of the main simulations also include a “dark matter only” run which helps study how the large scale structure and halos evolves under gravity without modeling the efforts of baryonic matter, such as gas cooling or star formation, which is often turbulent [@tng_release_2021].
 
 ## Tables, quotes, dividers
 
@@ -500,13 +485,36 @@ $R_{200}$ of their host.
 | TNG100   | ~100 Mpc   | balance        |
 | TNG300   | ~300 Mpc   | statistics     |
 
+TNG50 models the smalest volume at the highest resolution, enabling detailed studies of the internal structure of galaxies and stellar populations. TNG100 balances volume and resolution, while TNG300 models the largest volume, enabling studies of large-scale structure and rare objects. 
+
+
+The project has since expanded with the addition of TNG-Cluster. TNG-Cluster provides 352 high-resolution zoom-in galaxy clusters. Zoom-in simulations concetrate computational resources around selected objects to balance the need for high resolution with the need for large volume, needed for studying massive rare objects. As such, TNG-Cluster is able to significantly enhance the sample statistics of the highest cluster mass regime, enabling insight into the most massive and rare objects in the universe. Other projects have extended TNG framework into new regimes and applications, including CAMELS, which investigates the effects of varying cosmological and astrophysical parameters, and TNG-Millenium, which explores the connection between the TNG galaxy gromation model and large-scale structure in the universe.
+
+
+Key Findings thus far:
+Since their release, the IllustrisTNG simulations have contributed to a wide range of studies investigating galaxy formation and evolution, and the large-scale structure of the universe. One of the earliest successes of the IllustrisTNG simulations was its ability to reproduce the observed galaxy color bimodality, a key feature of the galaxy population. IllustrisTNG simulations have also aided in udnerstanding the relationship between a dark matter halo and the galaxies that form within it, as well as the role of feedback from supermassive black holes in regulating star formation and shaping galaxy properties.
+
 {{video https://www.youtube.com/watch?v=O674AZ_UKZk | Formation of a single massive galaxy through time in the TNG50 cosmic simulations}}
 
-{{video https://youtu.be/xg25bxdRw-M?si=X411kT6zBMb9dVIK | Simulations of the formation of galaxies in TNG50}}
+
+Data access:
+One of the most valuable aspects of IllustrisTNG is that its simulation data are publicly available. Researchers can access snapshots, particle and gas-cell properties, halo and subhalo catalogs, and merger trees through the official IllustrisTNG website. The data can be downloaded directly for local analysis or accessed through a web-based API, allowing users to retrieve specific galaxies and physical quantities without downloading entire simulation volumes.
+
+For those getting started, the project provides extensive documentation, example scripts, and tutorials for navigating the data. Python is particularly useful for analyzing the simulations, with the official API and helper libraries providing tools to retrieve and process different particle types, identify galaxies, and follow their evolution across cosmic time. This accessibility allows researchers and students to investigate a wide range of questions using the same underlying simulation data.
+
+{{tutorial TNG_Startup | For those interested in getting started with TNG, consider taking some time interacting with my in-browser tutorials on this page}}.
+
+IllustrisTNG simulations provide a powerful tool for studying how galaxy and the large-scale structure of the universe form and evolved. By combining a wide range of physical processes with high-resolution simulations, the project has enabled studies of magnetic fields, feedback processes, and the host-halo relationship, among many other topics. The public availability of the data and the accompanying documentation and tutorials make it accessible to a wide range of researchers, enabling new discoveries and insights into the universe's evolution.
+
 
 ## To see more:
-Check out the TNG Page: [IllustrisTNG Project](https://www.tng-project.org) <br>
-Check out my tutorials:
+Check out the TNG Page: <br>
+[IllustrisTNG Project](https://www.tng-project.org) <br>
+
+Check out this video on more galaxy formation in TNG50: <br>
+{{video https://youtu.be/xg25bxdRw-M?si=X411kT6zBMb9dVIK | Simulations of the formation of galaxies in TNG50}}
+
+Check out my tutorials: <br>
 {{tutorial | Interactive Python tutorials on this site}}
 `
     },

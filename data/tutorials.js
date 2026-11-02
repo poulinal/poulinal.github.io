@@ -197,6 +197,24 @@
 //       ]
 //     }
 
+    {
+      id: 'TNG_Startup',
+      title: 'TNG Startup Guide',
+      summary: 'A guide to getting started with the IllustrisTNG simulations.',
+      level: 'Beginner',
+      duration: '5 min',
+      packages: ['numpy', 'matplotlib'],
+      cells: [
+        { type: 'markdown', source: String.raw`
+## Planck's law
+
+$$B_\lambda(T) = \frac{2hc^2}{\lambda^5}\,\frac{1}{e^{hc/\lambda k_B T} - 1}$$
+` },
+        { type: 'code', source: String.raw`import numpy as np
+import matplotlib.pyplot as plt`
+        }
+      ]
+    }
 
   ];
 
