@@ -36,6 +36,10 @@
  *     without escaping backslashes. Just avoid the characters ` and ${ inside;
  *     for inline code in markdown cells write <code>x</code> instead of `x`.
  *   - Markdown supports headings, lists, `code`, links, and LaTeX ($...$).
+ *   - Markdown cells also get the blog extras (see data/blog.js): ::: note /
+ *     key / definition / tip / question callouts, {{figure ...}}, {{video ...}},
+ *     and {{tutorial ...}} / {{pub ...}} / {{blog ...}} cards. Citations
+ *     ([@key]) are blog-only.
  *   - matplotlib figures appear below the cell automatically; no need to
  *     call plt.show() (it's harmless if you do).
  *   - The value of the last line is displayed, like Jupyter's Out[n].
@@ -319,7 +323,7 @@ The fields we use:
 The six columns of <code>SubhaloMassType</code> are particle types: **0** gas, **1** dark matter, **2** unused,
 **3** tracers, **4** stars (and wind), **5** black holes.
 
-::: tip Supplementary catalogs
+::: note Supplementary catalogs
 Beyond the group catalogs there are many
 [supplementary catalogs](https://www.tng-project.org/data/docs/specifications/#sec5), for example
 time-averaged star formation rates, which are closer to what observers measure. They download the same way,

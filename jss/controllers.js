@@ -393,7 +393,14 @@
     if (c.type === 'markdown') {
       this.cellsEl.insertAdjacentHTML('beforeend', V.notebook.markdownCell(id));
       c.el = this.cellsEl.lastElementChild;
-      Site.util.markdown(trimmed).then(function (html) {
+      // Same extras as blog posts: ::: callouts, {{figure}}, {{tutorial}} cards, etc.
+      var expanded = V.blog.expand(trimmed, {
+        refs: {},
+        tutorial: M.tutorials.byId.bind(M.tutorials),
+        publication: M.publications.byId.bind(M.publications),
+        post: M.blog.byId.bind(M.blog)
+      });
+      Site.util.markdown(expanded.text).then(function (html) {
         c.el.innerHTML = html;
         Site.util.renderMath(c.el);
       });
